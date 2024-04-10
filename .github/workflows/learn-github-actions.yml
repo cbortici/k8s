@@ -14,10 +14,11 @@ jobs:
             echo "Inside group"
             pwd
             ls
+            terraform -v
 
-    # - name: Terraform Init
-    #   id: init
-    #   run: terraform init
+      - name: Terraform Init
+        id: init
+        run: terraform init
 
     # - name: Terraform Validate
     #   id: validate
