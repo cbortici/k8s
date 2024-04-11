@@ -9,9 +9,9 @@ terraform {
 
 provider "aws" {
   # Configuration options
-  region = "eu-north-1"
-  access_key = ""
-  secret_key = ""
+  # region = "eu-north-1"
+  # access_key = ""
+  # secret_key = ""
 }
 provider "kubernetes" {
     host                   = aws_eks_cluster.example.endpoint
