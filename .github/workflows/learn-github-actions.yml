@@ -4,6 +4,8 @@ on: [push]
 jobs:
   check-bats-version:
     runs-on: ubuntu-latest
+    environment: 
+      name: test
     steps:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
