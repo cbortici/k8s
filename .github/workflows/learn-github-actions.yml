@@ -25,14 +25,16 @@ jobs:
             export AWS_REGION="eu-north-1"
 
       - name: Terraform Init
-        id: init
-        run: terraform init
+        uses: hashicorp/terraform-github-actions/init@v0.4.0
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET }}
 
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate -no-color
+      # - name: Terraform Validate
+      #   id: validate
+      #   run: terraform validate -no-color
 
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -no-color
-        continue-on-error: true
+      # - name: Terraform Plan
+      #   id: plan
+      #   run: terraform plan -no-color
+      #   continue-on-error: true
