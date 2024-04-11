@@ -1,14 +1,15 @@
 name: learn-github-actions
 run-name: ${{ github.actor }} is learning GitHub Actions
-on: workflow_dispatch
-inputs:
-  num-octocats:
-    description: 'Number of Octocats'
-    required: false
-    default: '1'
-  octocat-eye-color:
-    description: 'Eye color of the Octocats'
-    required: true
+on: 
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags'  
+
 
 jobs:
   terraformrun:
