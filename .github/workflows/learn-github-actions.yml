@@ -14,15 +14,15 @@ jobs:
         run: |
             echo "::group::My title"
             echo "Inside group"
-            pwd
-            ls
-            terraform -v
+            # pwd
+            # ls
+            # terraform -v
             echo $ID$SECRET
             echo $TESTVAR
-            export AWS_ACCESS_KEY_ID=test
-            echo $AWS_ACCESS_KEY_ID
-            export AWS_SECRET_ACCESS_KEY=$SECRET
-            export AWS_REGION="eu-north-1"
+            # export AWS_ACCESS_KEY_ID=test
+            # echo $AWS_ACCESS_KEY_ID
+            # export AWS_SECRET_ACCESS_KEY=$SECRET
+            # export AWS_REGION="eu-north-1"
 
       # - name: Terraform Init
       #   id: init
