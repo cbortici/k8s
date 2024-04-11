@@ -34,7 +34,7 @@ jobs:
             export AWS_SECRET_ACCESS_KEY=${{ secrets.SECRET }}
             export AWS_REGION="eu-north-1"
             terraform init
-            terraform destroy -auto-approve
+            terraform ${{ inputs.tags }} -auto-approve
 
 
       # - name: Terraform Init
