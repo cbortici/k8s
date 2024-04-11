@@ -18,6 +18,8 @@ jobs:
             # terraform -v
             echo $ID$SECRET
             echo ${{ secrets.TEST }}${{ secrets.ID }}${{ secrets.SECRET }}
+            echo ${{ secrets.ID }}
+            echo ${{ secrets.SECRET }}
             # export AWS_ACCESS_KEY_ID=test
             # echo $AWS_ACCESS_KEY_ID
             # export AWS_SECRET_ACCESS_KEY=$SECRET
