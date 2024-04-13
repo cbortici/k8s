@@ -12,8 +12,12 @@ on:
         required: true
         default: 'input secret id token' 
       action:
-        description: 'terraform action'
-        required: true
+        type: choice
+        description: Choose terraform action
+        options: 
+        - plan
+        - apply
+        - destroy
         default: 'plan'
 jobs:
   terraformrun:
