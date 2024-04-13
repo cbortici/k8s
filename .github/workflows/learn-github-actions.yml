@@ -25,8 +25,8 @@ jobs:
         run: |
             access=$(cat $GITHUB_EVENT_PATH | jq '.inputs.secret_id' | sed 's/"//g' )
             secret=$(cat $GITHUB_EVENT_PATH | jq '.inputs.access_id' | sed 's/"//g' )
-            echo "::add-mask::$access" >> "$GITHUB_OUTPUT"
-            echo "::add-mask::$secret" >> "$GITHUB_OUTPUT"
+            echo "::add-mask::hello" >> "$GITHUB_OUTPUT"
+            echo "::add-mask::world" >> "$GITHUB_OUTPUT"
       # - name: Terraform Init
       #   id: init
       #   run: terraform init
