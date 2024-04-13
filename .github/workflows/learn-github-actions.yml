@@ -51,4 +51,5 @@ jobs:
             terraform ${{ inputs.action }}
             else
             terraform ${{ inputs.action }} --auto-approve
+            fi
         continue-on-error: true
