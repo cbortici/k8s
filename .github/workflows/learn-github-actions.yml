@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       HELLO: "${{ steps.auth.outputs.HELLO }}"
+      WORLD: "${{ steps.auth.outputs.WORLD }}"
     steps:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
