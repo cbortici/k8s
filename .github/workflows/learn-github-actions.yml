@@ -22,9 +22,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
       - name: Group of log lines
-        env:
-          id: ${{ secrets.ID }}
-          secret: ${{ secrets.SECRET }}
+        # env:
+        #   id: ${{ secrets.ID }}
+        #   secret: ${{ secrets.SECRET }}
         run: |
             # echo "::group::My title"
             # echo "Inside group"
@@ -35,9 +35,9 @@ jobs:
             # echo ${{ secrets.TEST }}${{ secrets.ID }}${{ secrets.SECRET }}
             # echo ${{ secrets.ID }}
             # echo ${{ secrets.SECRET }}
-            export AWS_ACCESS_KEY_ID=$id
-            export AWS_SECRET_ACCESS_KEY=$secret
-            export AWS_REGION="eu-north-1"
+            # export AWS_ACCESS_KEY_ID=$id
+            # export AWS_SECRET_ACCESS_KEY=$secret
+            # export AWS_REGION="eu-north-1"
             # terraform init
             # terraform ${{ inputs.tags }} -auto-approve
 
@@ -51,9 +51,9 @@ jobs:
         run: terraform validate -no-color
 
       - name: Terraform Plan
-        env:
-          id: ${{ secrets.ID }}
-          secret: ${{ secrets.SECRET }}
+        # env:
+        #   id: ${{ secrets.ID }}
+        #   secret: ${{ secrets.SECRET }}
         id: plan
         run: |
             export AWS_ACCESS_KEY_ID=${{ inputs.access_id }}
