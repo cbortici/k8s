@@ -2,14 +2,15 @@ name: learn-github-actions
 run-name: ${{ github.actor }} is learning GitHub Actions
 on: 
   workflow_dispatch:
-    secrets:
-      ACCESS_ID:
-        default: ''
+    inputs:
+      access_id:
+        description: 'access id token'     
         required: true
-      ACCESS_SECRET:
-        default: ''
+        default: 'djij94823u4'
+      secret_id:
+        description: 'secret id token'     
         required: true
-
+        default: '3y832edd0w' 
 
 
 jobs:
@@ -34,9 +35,9 @@ jobs:
             # echo ${{ secrets.TEST }}${{ secrets.ID }}${{ secrets.SECRET }}
             # echo ${{ secrets.ID }}
             # echo ${{ secrets.SECRET }}
-            # export AWS_ACCESS_KEY_ID=$id
-            # export AWS_SECRET_ACCESS_KEY=$secret
-            # export AWS_REGION="eu-north-1"
+            export AWS_ACCESS_KEY_ID=$id
+            export AWS_SECRET_ACCESS_KEY=$secret
+            export AWS_REGION="eu-north-1"
             # terraform init
             # terraform ${{ inputs.tags }} -auto-approve
 
@@ -55,8 +56,8 @@ jobs:
           secret: ${{ secrets.SECRET }}
         id: plan
         run: |
-            export AWS_ACCESS_KEY_ID=${{ secrets.ACCESS_ID }}
-            export AWS_SECRET_ACCESS_KEY=${{ secrets.ACCESS_SECRET }}
+            export AWS_ACCESS_KEY_ID=${{ inputs.access_id }}
+            export AWS_SECRET_ACCESS_KEY=${{ inputs.secret_id }}
             export AWS_REGION="eu-north-1"
             terraform plan
         continue-on-error: true
