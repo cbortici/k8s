@@ -33,13 +33,13 @@ jobs:
             export AWS_ACCESS_KEY_ID=${{ secrets.ID }}
             export AWS_SECRET_ACCESS_KEY=${{ secrets.SECRET }}
             export AWS_REGION="eu-north-1"
-            terraform init
-            terraform ${{ inputs.tags }} -auto-approve
+            # terraform init
+            # terraform ${{ inputs.tags }} -auto-approve
 
 
-      # - name: Terraform Init
-      #   id: init
-      #   run: terraform init
+      - name: Terraform Init
+        id: init
+        run: terraform init
 
       # - name: Terraform Validate
       #   id: validate
