@@ -6,11 +6,11 @@ on:
       access_id:
         description: 'access id token'     
         required: true
-        default: 'djij94823u4'
+        default: 'input access id token'
       secret_id:
         description: 'secret id token'     
         required: true
-        default: '3y832edd0w' 
+        default: 'input secret id token' 
 
 
 jobs:
@@ -21,25 +21,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
-      - name: Group of log lines
-        # env:
-        #   id: ${{ secrets.ID }}
-        #   secret: ${{ secrets.SECRET }}
-        run: |
-            # echo "::group::My title"
-            # echo "Inside group"
-            # # pwd
-            # # ls
-            # # terraform -v
-            # echo $ID$SECRET
-            # echo ${{ secrets.TEST }}${{ secrets.ID }}${{ secrets.SECRET }}
-            # echo ${{ secrets.ID }}
-            # echo ${{ secrets.SECRET }}
-            # export AWS_ACCESS_KEY_ID=$id
-            # export AWS_SECRET_ACCESS_KEY=$secret
-            # export AWS_REGION="eu-north-1"
-            # terraform init
-            # terraform ${{ inputs.tags }} -auto-approve
+      # - name: Group of log lines
+      #   env:
+      #     id: ${{ secrets.ID }}
+      #     secret: ${{ secrets.SECRET }}
+      #   run: |
+      #       echo "::group::My title"
+      #       echo "Inside group"
+      #       # pwd
+      #       # ls
+      #       # terraform -v
+      #       echo $ID$SECRET
+      #       echo ${{ secrets.TEST }}${{ secrets.ID }}${{ secrets.SECRET }}
+      #       echo ${{ secrets.ID }}
+      #       echo ${{ secrets.SECRET }}
+      #       export AWS_ACCESS_KEY_ID=$id
+      #       export AWS_SECRET_ACCESS_KEY=$secret
+      #       export AWS_REGION="eu-north-1"
+      #       terraform init
+      #       terraform ${{ inputs.tags }} -auto-approve
 
 
       - name: Terraform Init
