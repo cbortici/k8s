@@ -17,7 +17,6 @@ jobs:
         id: set-some-stuff
         run: |
           echo "HELLO=${{ inputs.access_id }}" >> "$GITHUB_OUTPUT"
-          echo "::add-mask::$HELLO" >> "$GITHUB_OUTPUT"
       - name: one-2
         run: |
           echo "${{steps.set-some-stuff.outputs.HELLO}}"
