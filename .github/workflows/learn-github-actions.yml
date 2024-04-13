@@ -1,5 +1,5 @@
-name: learn-github-actions
-run-name: ${{ github.actor }} is learning GitHub Actions
+name: Terraform Run
+run-name: Terraform action is ${{ inputs.action }}
 on: 
   workflow_dispatch:
     inputs:
@@ -11,6 +11,10 @@ on:
         description: 'secret id token'     
         required: true
         default: 'input secret id token' 
+      action:
+        description: 'terraform action'
+        required: true
+        default: 'plan'
 jobs:
   terraformrun:
     runs-on: ubuntu-latest
@@ -22,21 +26,21 @@ jobs:
         run: |
             MY_SECRET=$(cat $GITHUB_EVENT_PATH | jq '.inputs.secret_id' | sed 's/"//g' )
             MY_ID=$(cat $GITHUB_EVENT_PATH | jq '.inputs.access_id' | sed 's/"//g' )
-            echo "::add-mask::$MY_SECRET"
-            echo "::add-mask::$MY_ID"
-            echo "secretID=$MY_SECRET" >> $GITHUB_OUTPUT
-            echo "accessID=$MY_ID" >> $GITHUB_OUTPUT
+            echo '::add-mask::$MY_SECRET'
+            echo '::add-mask::$MY_ID'
+            echo 'secretID=$MY_SECRET' >> $GITHUB_OUTPUT
+            echo 'accessID=$MY_ID' >> $GITHUB_OUTPUT
       - name: Terraform Init
         id: init
         run: terraform init
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
-      - name: Terraform Plan
-        id: plan
+      - name: Terraform ${{ inputs.action }}
+        id: infrastructure
         run: |
             export AWS_ACCESS_KEY_ID=${{ steps.auth.outputs.accessID }}
             export AWS_SECRET_ACCESS_KEY=${{ steps.auth.outputs.secretID }}
-            export AWS_REGION="eu-north-1"
-            terraform plan
+            export AWS_REGION='eu-north-1'
+            terraform ${{ inputs.action }}
         continue-on-error: true
