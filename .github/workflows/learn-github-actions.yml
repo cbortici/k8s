@@ -7,7 +7,7 @@ on:
         default: ''
         required: true
       ACCESS_SECRET:
-       default: ''
+        default: ''
         required: true
 
 
