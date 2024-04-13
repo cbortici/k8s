@@ -14,21 +14,21 @@ on:
 jobs:
   authentication:
     runs-on: ubuntu-latest
-    # outputs:
-    #   accessID: "${{ steps.auth.outputs.accessID }}"
-    #   secretID: "${{ steps.auth.outputs.secretID }}"
+    outputs:
+      accessID: "${{ steps.auth.outputs.accessID }}"
+      secretID: "${{ steps.auth.outputs.secretID }}"
     steps:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
       - name: Auth
         id: auth
         run: |
-            MY_SECRET=$(cat $GITHUB_EVENT_PATH | jq '.inputs.secret_id' | sed 's/"//g' )
-            MY_ID=$(cat $GITHUB_EVENT_PATH | jq '.inputs.access_id' | sed 's/"//g' )
+            # MY_SECRET=$(cat $GITHUB_EVENT_PATH | jq '.inputs.secret_id' | sed 's/"//g' )
+            # MY_ID=$(cat $GITHUB_EVENT_PATH | jq '.inputs.access_id' | sed 's/"//g' )
             # echo "::add-mask::$MY_SECRET"
             # echo "::add-mask::$MY_ID"
-            echo "secretID=$MY_SECRET" >> $GITHUB_OUTPUT
-            echo "accessID=$MY_ID" >> $GITHUB_OUTPUT
+            echo "secretID=${{ inputs.secret_id }}" >> $GITHUB_OUTPUT
+            echo "accessID=${{ inputs.access_id }}" >> $GITHUB_OUTPUT
       # - name: Terraform Init
       #   id: init
       #   run: terraform init
