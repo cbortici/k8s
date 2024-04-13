@@ -4,8 +4,10 @@ on:
   workflow_dispatch:
     secrets:
       ACCESS_ID:
+        default: ''
         required: true
       ACCESS_SECRET:
+       default: ''
         required: true
 
 
