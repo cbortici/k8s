@@ -21,37 +21,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
-      - name:
+      - name: Auth
+        # env:
+        #   id: ${{ secrets.ID }}
+        #   secret: ${{ secrets.SECRET }}
         run: |
             MY_SECRET=$(cat $GITHUB_EVENT_PATH | jq '.inputs.secret_id' | sed 's/"//g' )
             MY_ID=$(cat $GITHUB_EVENT_PATH | jq '.inputs.access_id' | sed 's/"//g' )
             echo "::add-mask::$MY_SECRET"
             echo "::add-mask::$MY_ID"
-      # - name: Group of log lines
-      #   # env:
-      #   #   id: ${{ secrets.ID }}
-      #   #   secret: ${{ secrets.SECRET }}
-      #   run: |
-      #       INP_TOKEN=$(jq -r '.inputs.access_id' $GITHUB_EVENT_PATH)
-      #       INP_SECRET_TOKEN=$(jq -r '.inputs.secret_id' $GITHUB_EVENT_PATH)  
-      #       echo ::add-mask::$INP_SECRET
-      #       echo ::add-mask::$INP_TOKEN  
-      #       echo $INP_SECRET
-      #       echo $INP_TOKEN    
-      #       # echo "::group::My title"
-      #       # echo "Inside group"
-      #       # pwd
-      #       # ls
-      #       # terraform -v
-      #       # echo $ID$SECRET
-      #       # echo ${{ secrets.TEST }}${{ secrets.ID }}${{ secrets.SECRET }}
-      #       # echo ${{ secrets.ID }}
-      #       # echo ${{ secrets.SECRET }}
-      #       # export AWS_ACCESS_KEY_ID=$id
-      #       # export AWS_SECRET_ACCESS_KEY=$secret
-      #       # export AWS_REGION="eu-north-1"
-      #       # terraform init
-      #       # terraform ${{ inputs.tags }} -auto-approve
+            export AWS_ACCESS_KEY_ID=$MY_ID
+            export AWS_SECRET_ACCESS_KEY=$MY_SECRET
+            export AWS_REGION="eu-north-1"
 
 
       - name: Terraform Init
@@ -68,12 +49,12 @@ jobs:
         #   secret: ${{ secrets.SECRET }}
         id: plan
         run: |
-            MY_SECRET=$(cat $GITHUB_EVENT_PATH | jq '.inputs.secret_id' | sed 's/"//g' )
-            MY_ID=$(cat $GITHUB_EVENT_PATH | jq '.inputs.access_id' | sed 's/"//g' )
-            echo "::add-mask::$MY_SECRET"
-            echo "::add-mask::$MY_ID"
-            export AWS_ACCESS_KEY_ID=$MY_ID
-            export AWS_SECRET_ACCESS_KEY=$MY_SECRET
-            export AWS_REGION="eu-north-1"
+            # MY_SECRET=$(cat $GITHUB_EVENT_PATH | jq '.inputs.secret_id' | sed 's/"//g' )
+            # MY_ID=$(cat $GITHUB_EVENT_PATH | jq '.inputs.access_id' | sed 's/"//g' )
+            # echo "::add-mask::$MY_SECRET"
+            # echo "::add-mask::$MY_ID"
+            # export AWS_ACCESS_KEY_ID=$MY_ID
+            # export AWS_SECRET_ACCESS_KEY=$MY_SECRET
+            # export AWS_REGION="eu-north-1"
             terraform plan
         continue-on-error: true
