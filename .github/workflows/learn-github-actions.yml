@@ -10,58 +10,33 @@ on:
       secret_id:
         description: 'secret id token'     
         required: true
-        default: 'secret access id token'
+        default: 'input secret id token' 
 jobs:
-  authentication:
+  terraformrun:
     runs-on: ubuntu-latest
-    outputs:
-      accessID: "${{ steps.auth.outputs.id }}"
-      secretID: "${{ steps.auth.outputs.st }}"
     steps:
       - uses: actions/checkout@v4
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v3   
       - name: Auth
         id: auth
         run: |
-            # access=$(cat $GITHUB_EVENT_PATH | jq '.inputs.access_id' | sed 's/"//g' )
-            # secret=$(cat $GITHUB_EVENT_PATH | jq '.inputs.secret_id' | sed 's/"//g' )
-            echo "id=${{ inputs.access_id }}" >> "$GITHUB_OUTPUT"
-            echo "st=${{ inputs.secret_id }}" >> "$GITHUB_OUTPUT"
-            # echo "::add-mask::${{ inputs.access_id }}"
-            # echo "::add-mask::${{ inputs.secret_id }}"
-      # - name: Terraform Init
-      #   id: init
-      #   run: terraform init
-
-      # - name: Terraform Validate
-      #   id: validate
-      #   run: terraform validate -no-color
-
-      # - name: Terraform Plan
-      #   id: plan
-      #   run: |
-      #       export AWS_ACCESS_KEY_ID=${{ steps.auth.outputs.accessID }}
-      #       export AWS_SECRET_ACCESS_KEY=${{ steps.auth.outputs.secretID }}
-      #       export AWS_REGION="eu-north-1"
-      #       terraform plan
-      #   continue-on-error: true
-  terraform:
-    needs:
-      - authentication
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: hashicorp/setup-terraform@v3
-      - name: terraform init
+            MY_SECRET=$(cat $GITHUB_EVENT_PATH | jq '.inputs.secret_id' | sed 's/"//g' )
+            MY_ID=$(cat $GITHUB_EVENT_PATH | jq '.inputs.access_id' | sed 's/"//g' )
+            echo "::add-mask::$MY_SECRET"
+            echo "::add-mask::$MY_ID"
+            echo "secretID=$MY_SECRET" >> $GITHUB_OUTPUT
+            echo "accessID=$MY_ID" >> $GITHUB_OUTPUT
+      - name: Terraform Init
         id: init
         run: terraform init
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
       - name: Terraform Plan
         id: plan
         run: |
-            echo "::add-mask::${{ needs.authentication.outputs.accessID }}"
-            echo "::add-mask::${{ needs.authentication.outputs.secretID }}"
-            export AWS_ACCESS_KEY_ID=${{ needs.authentication.outputs.accessID }}
-            export AWS_SECRET_ACCESS_KEY=${{ needs.authentication.outputs.secretID }}
-            export AWS_REGION=eu-north-1
+            export AWS_ACCESS_KEY_ID=${{ steps.auth.outputs.accessID }}
+            export AWS_SECRET_ACCESS_KEY=${{ steps.auth.outputs.secretID }}
+            export AWS_REGION="eu-north-1"
+            terraform plan
         continue-on-error: true
-
