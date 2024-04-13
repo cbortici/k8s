@@ -16,7 +16,7 @@ jobs:
       - name: one-1
         id: set-some-stuff
         run: |
-          echo "HELLO=.inputs.access_id" >> "$GITHUB_OUTPUT"
+          echo "HELLO=${{ inputs.access_id }}" >> "$GITHUB_OUTPUT"
       - name: one-2
         run: |
           echo "${{steps.set-some-stuff.outputs.HELLO}}"
