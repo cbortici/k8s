@@ -50,6 +50,8 @@ jobs:
       #       terraform plan
       #   continue-on-error: true
   terraform:
+    needs:
+      - authentication
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
