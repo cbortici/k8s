@@ -7,10 +7,10 @@ on:
         description: 'access id token'     
         required: true
         default: 'input access id token'
-      secret_id:
-        description: 'secret id token'     
-        required: true
-        default: 'input secret id token' 
+      # secret_id:
+      #   description: 'secret id token'     
+      #   required: true
+      #   default: 'input secret id token' 
 
 
 jobs:
@@ -21,31 +21,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
-      - name: Group of log lines
-        # env:
-        #   id: ${{ secrets.ID }}
-        #   secret: ${{ secrets.SECRET }}
+      - name:
         run: |
-            INP_TOKEN=$(jq -r '.inputs.access_id' $GITHUB_EVENT_PATH)
-            INP_SECRET_TOKEN=$(jq -r '.inputs.secret_id' $GITHUB_EVENT_PATH)  
-            echo ::add-mask::$INP_SECRET
-            echo ::add-mask::$INP_TOKEN  
-            echo $INP_SECRET
-            echo $INP_TOKEN    
-            # echo "::group::My title"
-            # echo "Inside group"
-            # pwd
-            # ls
-            # terraform -v
-            # echo $ID$SECRET
-            # echo ${{ secrets.TEST }}${{ secrets.ID }}${{ secrets.SECRET }}
-            # echo ${{ secrets.ID }}
-            # echo ${{ secrets.SECRET }}
-            # export AWS_ACCESS_KEY_ID=$id
-            # export AWS_SECRET_ACCESS_KEY=$secret
-            # export AWS_REGION="eu-north-1"
-            # terraform init
-            # terraform ${{ inputs.tags }} -auto-approve
+            MY_SECRET=$(cat $GITHUB_EVENT_PATH | jq '.inputs.access_id' | sed 's/"//g' )
+            echo "::add-mask::$MY_SECRET"
+      # - name: Group of log lines
+      #   # env:
+      #   #   id: ${{ secrets.ID }}
+      #   #   secret: ${{ secrets.SECRET }}
+      #   run: |
+      #       INP_TOKEN=$(jq -r '.inputs.access_id' $GITHUB_EVENT_PATH)
+      #       INP_SECRET_TOKEN=$(jq -r '.inputs.secret_id' $GITHUB_EVENT_PATH)  
+      #       echo ::add-mask::$INP_SECRET
+      #       echo ::add-mask::$INP_TOKEN  
+      #       echo $INP_SECRET
+      #       echo $INP_TOKEN    
+      #       # echo "::group::My title"
+      #       # echo "Inside group"
+      #       # pwd
+      #       # ls
+      #       # terraform -v
+      #       # echo $ID$SECRET
+      #       # echo ${{ secrets.TEST }}${{ secrets.ID }}${{ secrets.SECRET }}
+      #       # echo ${{ secrets.ID }}
+      #       # echo ${{ secrets.SECRET }}
+      #       # export AWS_ACCESS_KEY_ID=$id
+      #       # export AWS_SECRET_ACCESS_KEY=$secret
+      #       # export AWS_REGION="eu-north-1"
+      #       # terraform init
+      #       # terraform ${{ inputs.tags }} -auto-approve
 
 
       # - name: Terraform Init
