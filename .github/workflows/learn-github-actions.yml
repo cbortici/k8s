@@ -29,36 +29,14 @@ jobs:
             echo "::add-mask::$MY_ID"
             echo "secretID=$MY_SECRET" >> $GITHUB_OUTPUT
             echo "accessID=$MY_ID" >> $GITHUB_OUTPUT
-      # - name: Terraform Init
-      #   id: init
-      #   run: terraform init
-
-      # - name: Terraform Validate
-      #   id: validate
-      #   run: terraform validate -no-color
-
-      # - name: Terraform Plan
-      #   id: plan
-      #   run: |
-      #       # MY_SECRET=$(cat $GITHUB_EVENT_PATH | jq '.inputs.secret_id' | sed 's/"//g' )
-      #       # MY_ID=$(cat $GITHUB_EVENT_PATH | jq '.inputs.access_id' | sed 's/"//g' )
-      #       # echo "::add-mask::$MY_SECRET"
-      #       # echo "::add-mask::$MY_ID"
-      #       export AWS_ACCESS_KEY_ID=${{ steps.auth.outputs.accessID }}
-      #       export AWS_SECRET_ACCESS_KEY=${{ steps.auth.outputs.secretID }}
-      #       export AWS_REGION="eu-north-1"
-      #       terraform plan
-      #   continue-on-error: true
-  terraform:
-    needs:
-      - authentication
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: hashicorp/setup-terraform@v3
-      - name: terraform init
+      - name: Terraform Init
         id: init
         run: terraform init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
       - name: Terraform Plan
         id: plan
         run: |
@@ -66,9 +44,31 @@ jobs:
             # MY_ID=$(cat $GITHUB_EVENT_PATH | jq '.inputs.access_id' | sed 's/"//g' )
             # echo "::add-mask::$MY_SECRET"
             # echo "::add-mask::$MY_ID"
-            export AWS_ACCESS_KEY_ID=${{ needs.authentification.outputs.accessID }}
-            export AWS_SECRET_ACCESS_KEY=${{ needs.authentification.outputs.secretID }}
+            export AWS_ACCESS_KEY_ID=${{ steps.auth.outputs.accessID }}
+            export AWS_SECRET_ACCESS_KEY=${{ steps.auth.outputs.secretID }}
             export AWS_REGION="eu-north-1"
             terraform plan
         continue-on-error: true
+  # terraform:
+  #   needs:
+  #     - authentication
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: hashicorp/setup-terraform@v3
+  #     - name: terraform init
+  #       id: init
+  #       run: terraform init
+  #     - name: Terraform Plan
+  #       id: plan
+  #       run: |
+  #           # MY_SECRET=$(cat $GITHUB_EVENT_PATH | jq '.inputs.secret_id' | sed 's/"//g' )
+  #           # MY_ID=$(cat $GITHUB_EVENT_PATH | jq '.inputs.access_id' | sed 's/"//g' )
+  #           # echo "::add-mask::$MY_SECRET"
+  #           # echo "::add-mask::$MY_ID"
+  #           export AWS_ACCESS_KEY_ID=${{ needs.authentification.outputs.accessID }}
+  #           export AWS_SECRET_ACCESS_KEY=${{ needs.authentification.outputs.secretID }}
+  #           export AWS_REGION="eu-north-1"
+  #           terraform plan
+  #       continue-on-error: true
 
