@@ -7,6 +7,10 @@ on:
         description: 'access id token'     
         required: true
         default: 'input access id token'
+      secret_id:
+        description: 'secret id token'     
+        required: true
+        default: 'secret access id token'
 jobs:
   authentication:
     runs-on: ubuntu-latest
@@ -19,6 +23,7 @@ jobs:
         id: auth
         run: |
             echo "HELLO=${{ inputs.access_id }}" >> "$GITHUB_OUTPUT"
+            echo "WORLD=${{ inputs.secret_id }}" >> "$GITHUB_OUTPUT"
       - name: one-2
         run: |
           echo "${{steps.auth.outputs.HELLO}}"
@@ -52,5 +57,6 @@ jobs:
         id: plan
         run: |
             echo "${{ needs.authentication.outputs.HELLO }}"
+            echo "${{ needs.authentication.outputs.WORLD }}"
         continue-on-error: true
 
