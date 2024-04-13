@@ -29,7 +29,9 @@ jobs:
             INP_TOKEN=$(jq -r '.inputs.access_id' $GITHUB_EVENT_PATH)
             INP_SECRET_TOKEN=$(jq -r '.inputs.secret_id' $GITHUB_EVENT_PATH)  
             echo ::add-mask::$INP_SECRET
-            echo ::add-mask::$INP_TOKEN      
+            echo ::add-mask::$INP_TOKEN  
+            echo $INP_SECRET
+            echo $INP_TOKEN    
             # echo "::group::My title"
             # echo "Inside group"
             # pwd
