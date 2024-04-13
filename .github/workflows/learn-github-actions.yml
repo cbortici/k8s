@@ -21,18 +21,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
+      
       - name: Auth
+        id: auth
         # env:
         #   id: ${{ secrets.ID }}
         #   secret: ${{ secrets.SECRET }}
         run: |
             MY_SECRET=$(cat $GITHUB_EVENT_PATH | jq '.inputs.secret_id' | sed 's/"//g' )
             MY_ID=$(cat $GITHUB_EVENT_PATH | jq '.inputs.access_id' | sed 's/"//g' )
-            echo "::add-mask::$MY_SECRET"
-            echo "::add-mask::$MY_ID"
-            export AWS_ACCESS_KEY_ID=$MY_ID
-            export AWS_SECRET_ACCESS_KEY=$MY_SECRET
-            export AWS_REGION="eu-north-1"
+            echo "::add-mask::$MY_SECRET" >> $GITHUB_ENV
+            echo "::add-mask::$MY_ID" >> $GITHUB_ENV
+
+            # export AWS_ACCESS_KEY_ID=$MY_ID
+            # export AWS_SECRET_ACCESS_KEY=$MY_SECRET
+            # export AWS_REGION="eu-north-1"
 
 
       - name: Terraform Init
@@ -53,8 +56,8 @@ jobs:
             # MY_ID=$(cat $GITHUB_EVENT_PATH | jq '.inputs.access_id' | sed 's/"//g' )
             # echo "::add-mask::$MY_SECRET"
             # echo "::add-mask::$MY_ID"
-            # export AWS_ACCESS_KEY_ID=$MY_ID
-            # export AWS_SECRET_ACCESS_KEY=$MY_SECRET
-            # export AWS_REGION="eu-north-1"
+            export AWS_ACCESS_KEY_ID=$MY_ID
+            export AWS_SECRET_ACCESS_KEY=$MY_SECRET
+            export AWS_REGION="eu-north-1"
             terraform plan
         continue-on-error: true
