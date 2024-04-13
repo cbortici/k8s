@@ -14,9 +14,9 @@ on:
 jobs:
   authentication:
     runs-on: ubuntu-latest
-    outputs:
-      accessID: "${{ steps.auth.outputs.access }}"
-      secretID: "${{ steps.auth.outputs.secret }}"
+    # outputs:
+    #   accessID: "${{ steps.auth.outputs.access }}"
+    #   secretID: "${{ steps.auth.outputs.secret }}"
     steps:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
