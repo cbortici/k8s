@@ -19,6 +19,9 @@ jobs:
         id: auth
         run: |
             echo "HELLO=${{ inputs.access_id }}" >> "$GITHUB_OUTPUT"
+      - name: one-2
+        run: |
+          echo "${{steps.auth.outputs.HELLO}}"
       # - name: Terraform Init
       #   id: init
       #   run: terraform init
