@@ -7,10 +7,10 @@ on:
         description: 'access id token'     
         required: true
         default: 'input access id token'
-      # secret_id:
-      #   description: 'secret id token'     
-      #   required: true
-      #   default: 'input secret id token' 
+      secret_id:
+        description: 'secret id token'     
+        required: true
+        default: 'input secret id token' 
 
 
 jobs:
@@ -23,8 +23,10 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
       - name:
         run: |
-            MY_SECRET=$(cat $GITHUB_EVENT_PATH | jq '.inputs.access_id' | sed 's/"//g' )
+            MY_SECRET=$(cat $GITHUB_EVENT_PATH | jq '.inputs.secret_id' | sed 's/"//g' )
+            MY_ID=$(cat $GITHUB_EVENT_PATH | jq '.inputs.access_id' | sed 's/"//g' )
             echo "::add-mask::$MY_SECRET"
+            echo "::add-mask::$MY_ID"
       # - name: Group of log lines
       #   # env:
       #   #   id: ${{ secrets.ID }}
@@ -60,14 +62,18 @@ jobs:
       #   id: validate
       #   run: terraform validate -no-color
 
-      # - name: Terraform Plan
-      #   # env:
-      #   #   id: ${{ secrets.ID }}
-      #   #   secret: ${{ secrets.SECRET }}
-      #   id: plan
-      #   run: |
-      #       export AWS_ACCESS_KEY_ID=${{ inputs.access_id }}
-      #       export AWS_SECRET_ACCESS_KEY=${{ inputs.secret_id }}
-      #       export AWS_REGION="eu-north-1"
-      #       terraform plan
-      #   continue-on-error: true
+      - name: Terraform Plan
+        # env:
+        #   id: ${{ secrets.ID }}
+        #   secret: ${{ secrets.SECRET }}
+        id: plan
+        run: |
+            MY_SECRET=$(cat $GITHUB_EVENT_PATH | jq '.inputs.secret_id' | sed 's/"//g' )
+            MY_ID=$(cat $GITHUB_EVENT_PATH | jq '.inputs.access_id' | sed 's/"//g' )
+            echo "::add-mask::$MY_SECRET"
+            echo "::add-mask::$MY_ID"
+            export AWS_ACCESS_KEY_ID=$MY_ID
+            export AWS_SECRET_ACCESS_KEY=$MY_SECRET
+            export AWS_REGION="eu-north-1"
+            terraform plan
+        continue-on-error: true
