@@ -11,7 +11,7 @@ jobs:
   authentication:
     runs-on: ubuntu-latest
     outputs:
-      HELLO: "${{ steps.set-some-stuff.outputs.HELLO }}"
+      HELLO: "${{ steps.auth.outputs.HELLO }}"
     steps:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
