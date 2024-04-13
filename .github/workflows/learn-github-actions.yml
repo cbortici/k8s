@@ -46,5 +46,9 @@ jobs:
             export AWS_ACCESS_KEY_ID=${{ steps.auth.outputs.accessID }}
             export AWS_SECRET_ACCESS_KEY=${{ steps.auth.outputs.secretID }}
             export AWS_REGION='eu-north-1'
+            if [[ ${{ inputs.action }} == "plan" ]];
+            then
             terraform ${{ inputs.action }}
+            else
+            terraform ${{ inputs.action }} --auto-approve
         continue-on-error: true
