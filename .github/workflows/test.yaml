@@ -1,6 +1,11 @@
 name: Test
 on:
   workflow_dispatch:
+    inputs:
+      access_id:
+        description: 'access id token'     
+        required: true
+        default: 'input access id token'
 
 jobs:
   one:
@@ -11,7 +16,7 @@ jobs:
       - name: one-1
         id: set-some-stuff
         run: |
-          echo "HELLO=WORLD" >> "$GITHUB_OUTPUT"
+          echo "HELLO=.inputs.access_id" >> "$GITHUB_OUTPUT"
       - name: one-2
         run: |
           echo "${{steps.set-some-stuff.outputs.HELLO}}"
