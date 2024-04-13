@@ -11,7 +11,7 @@ jobs:
   one:
     runs-on: ubuntu-latest
     outputs:
-      HELLO: "${{ steps.set-some-stuff.outputs.${{ inputs.access_id }} }}"
+      HELLO: "${{ steps.set-some-stuff.outputs.inputs.access_id }}"
     steps:
       - name: one-1
         id: set-some-stuff
