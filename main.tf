@@ -9,9 +9,6 @@ terraform {
     }
   }
   backend "s3" {
-    # bucket         	   = "boexstfstatebucket"
-    # key              	   = "${var.key}terraform.tfstate"
-    # region         	   = "eu-central-1"
   }
 }
 
