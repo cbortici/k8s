@@ -9,8 +9,6 @@ terraform {
     bucket         	   = "boexstfstatebucket"
     key              	   = "terraform.tfstate"
     region         	   = "eu-central-1"
-    access_key = ""
-    secret_key = ""
   }
 }
 
