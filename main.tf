@@ -5,11 +5,11 @@ terraform {
       version = "5.43.0"
     }
   }
-  backend "s3" {
-    bucket         	   = "boexstfstatebucket"
-    key              	   = "terraform.tfstate"
-    region         	   = "eu-central-1"
-  }
+  # backend "s3" {
+  #   bucket         	   = "boexstfstatebucket"
+  #   key              	   = "terraform.tfstate"
+  #   region         	   = "eu-central-1"
+  # }
 }
 
 provider "aws" {
