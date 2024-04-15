@@ -1,3 +1,6 @@
+# variable "key" {
+#   type = string
+# }
 terraform {
   required_providers {
     aws = {
@@ -6,9 +9,9 @@ terraform {
     }
   }
   backend "s3" {
-    bucket         	   = "boexstfstatebucket"
-    key              	   = "terraform.tfstate"
-    region         	   = "eu-central-1"
+    # bucket         	   = "boexstfstatebucket"
+    # key              	   = "${var.key}terraform.tfstate"
+    # region         	   = "eu-central-1"
   }
 }
 
