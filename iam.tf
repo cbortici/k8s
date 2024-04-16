@@ -41,18 +41,18 @@ resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy" {
 #   role       = aws_iam_role.example.name
 # }
 ####NODE#####
-# data "aws_iam_policy_document" "nodeassume_role" {
-#   statement {
-#     effect = "Allow"
+data "aws_iam_policy_document" "nodeassume_role" {
+  statement {
+    effect = "Allow"
 
-#     principals {
-#       type        = "Service"
-#       identifiers = ["ec2.amazonaws.com"]
-#     }
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
 
-#     actions = ["sts:AssumeRole"]
-#   }
-# }
+    actions = ["sts:AssumeRole"]
+  }
+}
 resource "aws_iam_role" "noderole" {
   name = "eks-node-group-example"
 
