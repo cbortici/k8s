@@ -147,12 +147,6 @@ resource "aws_route53_record" "web" {
 #     Name = "dev-IG"
 #   }
 # }
-
-resource "aws_eip" "lb" {
-  depends_on    = [aws_internet_gateway.gw]
-  vpc           = true
-}
-
 # resource "aws_nat_gateway" "natgw" {
 #   allocation_id = aws_eip.lb.id
 #   subnet_id     = flatten([aws_subnet.example[*].id])
