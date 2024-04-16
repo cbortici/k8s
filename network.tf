@@ -141,12 +141,12 @@ resource "aws_route53_record" "web" {
 #     }  
 # }
 
-resource "aws_internet_gateway" "gw" {
-  vpc_id = aws_vpc.main.id
-  tags = {
-    Name = "dev-IG"
-  }
-}
+# resource "aws_internet_gateway" "gw" {
+#   vpc_id = aws_vpc.main.id
+#   tags = {
+#     Name = "dev-IG"
+#   }
+# }
 
 resource "aws_eip" "lb" {
   depends_on    = [aws_internet_gateway.gw]
