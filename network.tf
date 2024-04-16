@@ -126,20 +126,20 @@ resource "aws_route53_record" "web" {
   ttl     = 300
   records = [data.kubernetes_service.ingress_nginx.status[0].load_balancer[0].ingress[0].hostname]
 }
-data "aws_availability_zones" "available" {
-  state = "available"
-}
-resource "aws_subnet" "example" {
-  count = 2
+# data "aws_availability_zones" "available" {
+#   state = "available"
+# }
+# resource "aws_subnet" "example" {
+#   count = 2
 
-  availability_zone = data.aws_availability_zones.available.names[count.index]
-  cidr_block        = cidrsubnet(aws_vpc.main.cidr_block, 8, count.index)
-  vpc_id            = aws_vpc.main.id
-    tags = {
-    "kubernetes.io/cluster/${var.name}" = "shared"
-    "kubernetes.io/role/internal-elb"           = "1"
-    }  
-}
+#   availability_zone = data.aws_availability_zones.available.names[count.index]
+#   cidr_block        = cidrsubnet(aws_vpc.main.cidr_block, 8, count.index)
+#   vpc_id            = aws_vpc.main.id
+#     tags = {
+#     "kubernetes.io/cluster/${var.name}" = "shared"
+#     "kubernetes.io/role/internal-elb"           = "1"
+#     }  
+# }
 
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
