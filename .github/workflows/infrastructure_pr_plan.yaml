@@ -90,5 +90,5 @@ jobs:
           message: |
             ## terraform plan
             ```diff
-            test
+            ${{ env.PLAN }}
             ```
