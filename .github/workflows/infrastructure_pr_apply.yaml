@@ -113,10 +113,10 @@ jobs:
         if: steps.plan.outcome == 'failure'
         uses: mshick/add-pr-comment@v1
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.TEST }}
           repo-token-user-login: 'github-actions[bot]'
           message: |
-            Plan failed for **${{ matrix.path }}**:
+            Plan failed for **PROD**:
 
             ```
             ${{ steps.plan.outputs.stderr }}
@@ -126,10 +126,10 @@ jobs:
         if: steps.apply.outcome == 'failure'
         uses: mshick/add-pr-comment@v1
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.TEST }}
           repo-token-user-login: 'github-actions[bot]'
           message: |
-            Apply failed for **${{ matrix.path }}**:
+            Apply failed for **PROD**:
 
             ```
             ${{ steps.apply.outputs.stderr }}
