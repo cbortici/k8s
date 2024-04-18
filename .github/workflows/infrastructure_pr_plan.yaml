@@ -50,7 +50,7 @@ jobs:
 
       - name: Initialize Terraform
         run: |
-            terraform init terraform init -reconfigure -backend-config="bucket=boexstfstatebucket" -backend-config="key=${{ github.actor }}terraform.tfstate" -backend-config="region=eu-central-1" -input=false
+            terraform init terraform init -reconfigure -backend-config="bucket=boexstfstatebucket" -backend-config="key=${{ github.actor }}terraform.tfstate" -backend-config="region=eu-central-1"
 
       - name: Plan Terraform
         id: plan
