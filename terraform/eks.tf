@@ -11,7 +11,7 @@ resource "aws_eks_cluster" "example" {
     ]
 
   }
-      tags = {
+  tags = {
     Name = "Main"
   }
 }
@@ -27,7 +27,7 @@ resource "aws_eks_node_group" "example" {
   cluster_name    = aws_eks_cluster.example.name
   node_group_name = "example"
   node_role_arn   = aws_iam_role.noderole.arn
-  subnet_ids      = [
+  subnet_ids = [
     aws_subnet.private.id,
     aws_subnet.private1.id
   ]

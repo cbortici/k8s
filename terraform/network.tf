@@ -1,19 +1,17 @@
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
-    tags = {
-      Name = "main"
-    }  
+  tags = {
+    Name = "main"
+  }  
 }
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
-
   tags = {
     Name = "igw"
   }
 }
 resource "aws_eip" "nat" {
   vpc = true
-
   tags = {
     Name = "nat"
   }
@@ -21,7 +19,6 @@ resource "aws_eip" "nat" {
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat.id
   subnet_id     = aws_subnet.public.id
-
   tags = {
     Name = "nat"
   }
@@ -33,10 +30,10 @@ resource "aws_route_table" "private" {
   }
 }
 resource "aws_route" "private" {
-  route_table_id            = aws_route_table.private.id
-  destination_cidr_block    = "0.0.0.0/0"
-  gateway_id                = aws_internet_gateway.igw.id
-  depends_on                = [aws_route_table.private]
+  route_table_id         = aws_route_table.private.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.igw.id
+  depends_on             = [aws_route_table.private]
 }
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
@@ -45,10 +42,10 @@ resource "aws_route_table" "public" {
   }
 }
 resource "aws_route" "public" {
-  route_table_id            = aws_route_table.public.id
-  destination_cidr_block    = "0.0.0.0/0"
-  gateway_id                = aws_internet_gateway.igw.id
-  depends_on                = [aws_route_table.public]
+  route_table_id         = aws_route_table.public.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.igw.id
+  depends_on             = [aws_route_table.public]
 }
 resource "aws_route_table_association" "private" {
   subnet_id      = aws_subnet.private.id
@@ -73,46 +70,46 @@ resource "aws_route_table_association" "public1" {
 #   route_table_id = aws_route_table.public.id
 # }
 resource "aws_subnet" "private" {
-  vpc_id = aws_vpc.main.id
-  cidr_block = "10.0.0.0/19"
-  availability_zone = "eu-central-1a"
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.0.0/19"
+  availability_zone       = "eu-central-1a"
   map_public_ip_on_launch = true
   tags = {
-    "Name" = "1"
+    "Name"                            = "1"
     "kubernetes.io/role/internal-elb" = "1"
-    "kubernetes.io/cluster/demo" = "owned"
+    "kubernetes.io/cluster/demo"      = "owned"
   }
 }
 resource "aws_subnet" "private1" {
-  vpc_id = aws_vpc.main.id
-  cidr_block = "10.0.32.0/19"
-  availability_zone = "eu-central-1b"
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.32.0/19"
+  availability_zone       = "eu-central-1b"
   map_public_ip_on_launch = true
   tags = {
-    "Name" = "2"
+    "Name"                            = "2"
     "kubernetes.io/role/internal-elb" = "1"
-    "kubernetes.io/cluster/demo" = "owned"
+    "kubernetes.io/cluster/demo"      = "owned"
   }
 }
 resource "aws_subnet" "public" {
-  vpc_id = aws_vpc.main.id
-  cidr_block = "10.0.64.0/19"
-  availability_zone = "eu-central-1a"
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.64.0/19"
+  availability_zone       = "eu-central-1a"
   map_public_ip_on_launch = true
   tags = {
-    "Name" = "3"
-    "kubernetes.io/role/elb" = "1"
+    "Name"                       = "3"
+    "kubernetes.io/role/elb"     = "1"
     "kubernetes.io/cluster/demo" = "owned"
   }
 }
 resource "aws_subnet" "public1" {
-  vpc_id = aws_vpc.main.id
-  cidr_block = "10.0.96.0/19"
-  availability_zone = "eu-central-1b"
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.96.0/19"
+  availability_zone       = "eu-central-1b"
   map_public_ip_on_launch = true
   tags = {
-    "Name" = "4"
-    "kubernetes.io/role/elb" = "1"
+    "Name"                       = "4"
+    "kubernetes.io/role/elb"     = "1"
     "kubernetes.io/cluster/demo" = "owned"
   }
 }

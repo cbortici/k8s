@@ -13,7 +13,7 @@
 
 resource "aws_iam_role" "example" {
   name               = "eks-cluster-example"
-  assume_role_policy =  <<POLICY
+  assume_role_policy = <<POLICY
   {
     "Version": "2012-10-17",
     "Statement": [
