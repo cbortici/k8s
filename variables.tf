@@ -1,3 +1,3 @@
 variable "name" {
-  default = "eks"
+  default = "demo"
 }
