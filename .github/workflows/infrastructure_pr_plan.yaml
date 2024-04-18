@@ -1,0 +1,87 @@
+name: Plan / Test On PR
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3   
+        # with:
+        #   terraform_version: 1.0.9
+
+      - name: Run terraform fmt check
+        run: terraform fmt -check -diff -recursive ./terraform
+
+  plan:
+    name: Plan
+    # env:
+    #   TF_VAR_allowed_account_id: ${{ secrets.ALLOWED_ACCOUNT_ID }}
+    runs-on: ubuntu-latest
+    # strategy:
+    #   fail-fast: false
+    #   matrix:
+    #     path:
+    #       - dev
+    #       - stage
+    #       - prod
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3   
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: eu-central-1
+          aws-access-key-id: ${{ secrets.ID }}
+          aws-secret-access-key: ${{ secrets.SECRET }}
+
+      - name: Initialize Terraform
+        run: |
+            terraform init -input=false
+
+      - name: Plan Terraform
+        id: plan
+        continue-on-error: true
+        run: |
+          terraform plan -input=false -no-color -out=tfplan \
+          && terraform show -no-color tfplan
+
+      # Sed is taking all lines that begin with one or more spaces followed by a `+` or `-`.
+      # It stores the amount of spaces in `\1` and the +/- in `\2`.
+      # Then replace that portion of the line with `\2\1` (+/- followed by the number of matched spaces).
+      - name: Reformat Plan
+        run: |
+          echo '${{ steps.plan.outputs.stdout || steps.plan.outputs.stderr }}' \
+          | sed -E 's/^([[:space:]]+)([-+])/\2\1/g' > plan.txt
+
+      - name: Put Plan in Env Var
+        run: |
+          PLAN=$(cat plan.txt)
+          echo "PLAN<<EOF" >> $GITHUB_ENV
+          echo "$PLAN" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+    #   - name: Post Plan to GitHub PR
+    #     uses: mshick/add-pr-comment@v2
+    #     with:
+    #       allow-repeats: true
+    #       repo-token: ${{ secrets.GITHUB_TOKEN }}
+    #       repo-token-user-login: 'github-actions[bot]'
+    #       message: |
+    #         ## ${{ matrix.path }} plan
+    #         ```diff
+    #         ${{ env.PLAN }}
+    #         ```
