@@ -90,5 +90,5 @@ jobs:
           message: |
             ## terraform plan
             ```diff
-            echo ${{ env.PLAN }} no errors
+            echo ${{ env.PLAN }} no errors yet
             ```
