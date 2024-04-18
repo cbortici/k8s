@@ -18,9 +18,9 @@ jobs:
 
       - name: Run terraform fmt check
         run: |
-            if ! fmt=$(terraform fmt -check -diff -recursive ./terraform); \
+            if ! terraform fmt -check -diff -recursive ./terraform; \
             then
-            echo $fmt
+            echo "fmt completed successfully"
             fi        
   plan:
     name: Plan
