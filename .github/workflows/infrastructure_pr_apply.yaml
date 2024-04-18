@@ -87,10 +87,10 @@ jobs:
         continue-on-error: true
         run: |
           cd terraform/
-          terraform apply -destroy \
+          terraform destroy \
             -input=false \
             -no-color \
-            tfplan
+            # tfplan
 
       - name: Post Plan and Apply to GitHub PR
         if: steps.plan.outcome == 'success' && steps.apply.outcome == 'success'
