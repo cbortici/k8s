@@ -87,7 +87,7 @@ jobs:
         continue-on-error: true
         run: |
           cd terraform/
-          terraform apply \
+          terraform destroy \
             -input=false \
             -no-color \
             tfplan
