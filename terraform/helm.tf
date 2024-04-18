@@ -9,10 +9,10 @@ output "ingress_hostname" {
   value = data.kubernetes_service.ingress_nginx.status[0].load_balancer[0].ingress[0].hostname
 }
 resource "helm_release" "nginx-ingress-controller" {
-  name       = "ingress-nginx"
-  repository = "https://kubernetes.github.io/ingress-nginx"
-  chart      = "ingress-nginx"
-  namespace = "ingress"
+  name             = "ingress-nginx"
+  repository       = "https://kubernetes.github.io/ingress-nginx"
+  chart            = "ingress-nginx"
+  namespace        = "ingress"
   create_namespace = true
 
   # set {
@@ -31,14 +31,14 @@ resource "helm_release" "nginx-ingress-controller" {
 
 }
 resource "helm_release" "argocd" {
-  name       = "argocd"
-  repository = "https://argoproj.github.io/argo-helm"
-  chart      = "argo-cd"
-  namespace = "argocd"
+  name             = "argocd"
+  repository       = "https://argoproj.github.io/argo-helm"
+  chart            = "argo-cd"
+  namespace        = "argocd"
   create_namespace = true
 
-   values = [
-    "${file("values.yaml")}"
+  values = [
+    "${file("../values.yaml")}"
   ]
   # set {
   #   name  = "create namespace"
