@@ -1,32 +1,30 @@
-name: Plan / Test On PR
+name: Plan / Apply On Merge
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
+  inform_about_apply:
+    name: Inform About Apply
+    runs-on: ubuntu-20.04
+
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
+      - name: Inform on PR that Apply is Running
+        uses: mshick/add-pr-comment@v1
+        with:
+          repo-token: ${{ secrets.TEST }}
+          repo-token-user-login: 'github-actions[bot]'
+          message: |
+            ***Running terraform apply***
+            Results will display here momentarily...
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3   
-
-      - name: Run terraform fmt check
-        run: |
-            if ! terraform fmt -check -diff -recursive ./terraform; \
-            then
-            echo "fmt completed successfully"
-            fi        
-  plan:
-    name: Plan
+  plan_and_apply:
+    name: Plan and Apply
     # env:
     #   TF_VAR_allowed_account_id: ${{ secrets.ALLOWED_ACCOUNT_ID }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     # strategy:
     #   fail-fast: false
     #   matrix:
@@ -38,7 +36,6 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-
       - name: Setup helm
         uses: azure/setup-helm@v4.2.0
 
@@ -46,7 +43,7 @@ jobs:
         uses: azure/setup-kubectl@v3
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3   
+        uses: hashicorp/setup-terraform@v3
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -72,23 +69,68 @@ jobs:
       # It stores the amount of spaces in `\1` and the +/- in `\2`.
       # Then replace that portion of the line with `\2\1` (+/- followed by the number of matched spaces).
       - name: Reformat Plan
+        if: steps.plan.outcome == 'success'
         run: |
           echo '${{ steps.plan.outputs.stderr }}' > plan.txt
+
       - name: Put Plan in Env Var
+        if: steps.plan.outcome == 'success'
         run: |
           PLAN=$(cat plan.txt)
           echo "PLAN<<EOF" >> $GITHUB_ENV
           echo "$PLAN" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-      - name: Post Plan to GitHub PR
+      - name: Apply Terraform
+        if: steps.plan.outcome == 'success'
+        id: apply
+        continue-on-error: true
+        run: |
+          cd terraform/
+          terraform apply \
+            -input=false \
+            -no-color \
+            tfplan
+
+      - name: Post Plan and Apply to GitHub PR
+        if: steps.plan.outcome == 'success' && steps.apply.outcome == 'success'
         uses: mshick/add-pr-comment@v1
         with:
-          allow-repeats: true
           repo-token: ${{ secrets.TEST }}
           repo-token-user-login: 'github-actions[bot]'
           message: |
-            ## terraform plan
+            Applying **PROD**:
+
             ```diff
             echo ${{ env.PLAN }} no errors
+            ```
+
+            ```
+            ${{ steps.apply.outputs.stdout }}
+            ```
+
+      - name: Post Plan Failure
+        if: steps.plan.outcome == 'failure'
+        uses: mshick/add-pr-comment@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token-user-login: 'github-actions[bot]'
+          message: |
+            Plan failed for **${{ matrix.path }}**:
+
+            ```
+            ${{ steps.plan.outputs.stderr }}
+            ```
+
+      - name: Post Apply Failure
+        if: steps.apply.outcome == 'failure'
+        uses: mshick/add-pr-comment@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token-user-login: 'github-actions[bot]'
+          message: |
+            Apply failed for **${{ matrix.path }}**:
+
+            ```
+            ${{ steps.apply.outputs.stderr }}
             ```
