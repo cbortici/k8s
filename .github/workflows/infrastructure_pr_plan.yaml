@@ -38,6 +38,12 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
+      - name: Setup helm
+        uses: azure/setup-helm@v4.2.0
+
+      - name: Setup helm
+        uses: azure/setup-kubectl@v3
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3   
 
@@ -64,9 +70,7 @@ jobs:
       # Then replace that portion of the line with `\2\1` (+/- followed by the number of matched spaces).
       - name: Reformat Plan
         run: |
-          echo '${{ steps.plan.outputs.stdout || steps.plan.outputs.stderr }}' \
-          | sed -E 's/^([[:space:]]+)([-+])/\2\1/g' > plan.txt
-
+          echo '${{ steps.plan.outputs.stdout || steps.plan.outputs.stderr }}' > plan.txt
       - name: Put Plan in Env Var
         run: |
           PLAN=$(cat plan.txt)
