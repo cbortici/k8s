@@ -15,11 +15,9 @@ jobs:
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3   
-        # with:
-        #   terraform_version: 1.0.9
 
       - name: Run terraform fmt check
-        run: terraform fmt -check -diff -recursive .
+        run: terraform fmt -check -diff -recursive ./terraform
 
   plan:
     name: Plan
@@ -56,12 +54,14 @@ jobs:
 
       - name: Initialize Terraform
         run: |
+            cd terraform/
             terraform init -reconfigure -backend-config="bucket=boexstfstatebucket" -backend-config="key=${{ github.actor }}terraform.tfstate" -backend-config="region=eu-central-1"
 
       - name: Plan Terraform
         id: plan
         continue-on-error: true
         run: |
+          cd terraform
           terraform plan -input=false -no-color -out=tfplan \
           && terraform show -no-color tfplan
 
