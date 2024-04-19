@@ -35,7 +35,7 @@ on:
         default: 'eu-central-1'
 jobs:
   terraformrun:
-    runs-on: ip-10-0-0-36 
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3   
