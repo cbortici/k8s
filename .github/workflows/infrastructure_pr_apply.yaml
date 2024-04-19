@@ -99,7 +99,7 @@ jobs:
           repo-token: ${{ secrets.TEST }}
           repo-token-user-login: 'github-actions[bot]'
           message: |
-            Applying **PROD**:
+            Applying ***PROD***:
 
             ```diff
             echo ${{ env.PLAN }} no errors
