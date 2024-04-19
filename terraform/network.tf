@@ -77,7 +77,7 @@ resource "aws_subnet" "private" {
   tags = {
     "Name"                            = "1"
     "kubernetes.io/role/internal-elb" = "1"
-    "kubernetes.io/cluster/demo"      = "owned"
+    "kubernetes.io/cluster/${var.name}"      = "owned"
   }
 }
 resource "aws_subnet" "private1" {
@@ -88,7 +88,7 @@ resource "aws_subnet" "private1" {
   tags = {
     "Name"                            = "2"
     "kubernetes.io/role/internal-elb" = "1"
-    "kubernetes.io/cluster/demo"      = "owned"
+    "kubernetes.io/cluster/${var.name}"      = "owned"
   }
 }
 resource "aws_subnet" "public" {
@@ -99,7 +99,7 @@ resource "aws_subnet" "public" {
   tags = {
     "Name"                       = "3"
     "kubernetes.io/role/elb"     = "1"
-    "kubernetes.io/cluster/demo" = "owned"
+    "kubernetes.io/cluster/${var.name}" = "owned"
   }
 }
 resource "aws_subnet" "public1" {
@@ -110,7 +110,7 @@ resource "aws_subnet" "public1" {
   tags = {
     "Name"                       = "4"
     "kubernetes.io/role/elb"     = "1"
-    "kubernetes.io/cluster/demo" = "owned"
+    "kubernetes.io/cluster/${var.name}" = "owned"
   }
 }
 resource "aws_route53_zone" "example" {
