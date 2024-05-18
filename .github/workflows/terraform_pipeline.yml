@@ -94,7 +94,12 @@ jobs:
           cd boex/boex_dev_terraform
           terraform apply -target=module.rancher-server.local_file.kube_config_server_yaml --auto-approve
           terraform apply -target=module.rancher-server.local_file.kube_config_workload_yaml --auto-approve
-          terraform apply --auto-approve
+          while terraform apply --auto-approve; [[ $? -ne 0 ]];
+          do
+          echo "Result unsuccessful"
+          sleep 1
+          done
+          echo "successfully destroyed"
 
       - name: Post Plan and Apply to GitHub PR
         if: steps.plan.outcome == 'success' && steps.apply.outcome == 'success'
