@@ -88,6 +88,9 @@ jobs:
           cd boex/boex_dev_terraform
           terraform apply -target=module.rancher-server.local_file.kube_config_workload_yaml --auto-approve
           terraform apply -target=module.rancher-server.local_file.kube_config_server_yaml --auto-approve
+          terraform apply -target=module.ec2_instances.tls_private_key.global_key --auto-approve
+          terraform apply -target=module.ec2_instances.local_sensitive_file.ssh_private_key_pem --auto-approve
+          terraform apply -target=module.ec2_instances.local_file.ssh_public_key_openssh --auto-approve
           terraform destroy --auto-approve
 
       - name: Post Plan and Apply to GitHub PR
