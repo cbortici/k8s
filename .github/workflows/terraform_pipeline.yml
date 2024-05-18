@@ -52,13 +52,13 @@ jobs:
 
       - name: Initialize Terraform
         run: |
-            cd terraform/boex/boex_dev_terraform
+            cd boex/boex_dev_terraform
             terraform init -reconfigure -backend-config="bucket=boexstfstatebucket" -backend-config="key=boexterraform.tfstate" -backend-config="region=eu-central-1"
 
       - name: Plan Terraform
         id: plan
         run: |
-          cd terraform/boex/boex_dev_terraform
+          cd boex/boex_dev_terraform
           terraform plan -input=false -no-color -out=tfplan \
           && terraform show -no-color tfplan
 
@@ -83,7 +83,7 @@ jobs:
         id: apply
         continue-on-error: true
         run: |
-          cd terraform/boex/boex_dev_terraform
+          cd boex/boex_dev_terraform
           terraform apply \
             -input=false \
             -no-color \
