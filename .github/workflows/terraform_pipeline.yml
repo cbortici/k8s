@@ -92,8 +92,7 @@ jobs:
           cd boex/boex_dev_terraform
           terraform apply \
             -input=false \
-            -no-color \
-            tfplan
+            -no-color
 
       - name: Post Plan and Apply to GitHub PR
         if: steps.plan.outcome == 'success' && steps.apply.outcome == 'success'
