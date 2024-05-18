@@ -1,82 +1,133 @@
-name: Terraform Run
-run-name: Terraform action is ${{ inputs.action }}
+name: Plan / Apply On Merge
+
 on: 
   workflow_dispatch:
-    inputs:
-      access_id:
-        description: 'access id token'     
-        required: true
-        default: 'input access id token'
-      secret_id:
-        description: 'secret id token'     
-        required: true
-        default: 'input secret id token' 
-      action:
-        type: choice
-        description: Choose terraform action
-        options: 
-        - plan
-        - apply
-        - destroy
-        default: 'plan'
-      region:
-        type: choice
-        description: Choose region
-        options: 
-        - us-east-1
-        - us-east-2
-        - us-west-1
-        - us-west-2
-        - eu-central-1
-        - eu-central-2
-        - eu-west-1
-        - eu-west-2
-        - eu-north-1
-        default: 'eu-central-1'
+
 jobs:
-  terraformrun:
-    runs-on: ubuntu-latest
+  inform_about_apply:
+    name: Inform About Apply
+    runs-on: ubuntu-20.04
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: hashicorp/setup-terraform@v3   
-      - uses: aws-actions/setup-sam@v2
-      - uses: azure/setup-kubectl@v3
+      - name: Inform on PR that Apply is Running
+        uses: mshick/add-pr-comment@v1
         with:
-          version: 'latest' # default is latest stable
-        id: kubectl
-      - uses: azure/setup-helm@v4.2.0
+          repo-token: ${{ secrets.TEST }}
+          repo-token-user-login: 'github-actions[bot]'
+          message: |
+            ***Running terraform apply***
+            Results will display here momentarily...
+
+  plan_and_apply:
+    name: Plan and Apply
+    # env:
+    #   TF_VAR_allowed_account_id: ${{ secrets.ALLOWED_ACCOUNT_ID }}
+    runs-on: ubuntu-20.04
+    # strategy:
+    #   fail-fast: false
+    #   matrix:
+    #     path:
+    #       - dev
+    #       - stage
+    #       - prod
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Setup helm
+        uses: azure/setup-helm@v4.2.0
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          version: 'latest' # default is latest (stable)
-        id: helm
-      - name: Auth
-        id: auth
+          aws-region: eu-central-1
+          aws-access-key-id: ${{ secrets.ID }}
+          aws-secret-access-key: ${{ secrets.SECRET }}
+
+      - name: Initialize Terraform
         run: |
-            MY_SECRET=$(cat $GITHUB_EVENT_PATH | jq '.inputs.secret_id' | sed 's/"//g' )
-            MY_ID=$(cat $GITHUB_EVENT_PATH | jq '.inputs.access_id' | sed 's/"//g' )
-            echo "::add-mask::$MY_SECRET"
-            echo "::add-mask::$MY_ID"
-            echo "secretID=$MY_SECRET" >> $GITHUB_OUTPUT
-            echo "accessID=$MY_ID" >> $GITHUB_OUTPUT
-      - name: Terraform Init
-        id: init
+            cd terraform/boex/boex_dev_terraform
+            terraform init -reconfigure -backend-config="bucket=boexstfstatebucket" -backend-config="key=boexterraform.tfstate" -backend-config="region=eu-central-1"
+
+      - name: Plan Terraform
+        id: plan
         run: |
-            export AWS_ACCESS_KEY_ID=${{ secrets.ID }}
-            export AWS_SECRET_ACCESS_KEY=${{ secrets.SECRET }}
-            cd terraform/
-            terraform init -reconfigure -backend-config="bucket=boexstfstatebucket" -backend-config="key=${{ github.actor }}terraform.tfstate" -backend-config="region=eu-central-1"
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate -no-color
-      - name: Terraform ${{ inputs.action }}
-        id: infrastructure
+          cd terraform/boex/boex_dev_terraform
+          terraform plan -input=false -no-color -out=tfplan \
+          && terraform show -no-color tfplan
+
+      # Sed is taking all lines that begin with one or more spaces followed by a `+` or `-`.
+      # It stores the amount of spaces in `\1` and the +/- in `\2`.
+      # Then replace that portion of the line with `\2\1` (+/- followed by the number of matched spaces).
+      - name: Reformat Plan
+        if: steps.plan.outcome == 'success'
         run: |
-            export AWS_ACCESS_KEY_ID=${{ steps.auth.outputs.accessID }}
-            export AWS_SECRET_ACCESS_KEY=${{ steps.auth.outputs.secretID }}
-            export AWS_REGION=${{ inputs.region }}
-            cd terraform/
-            if [[ ${{ inputs.action }} == "plan" ]];
-            then
-            terraform ${{ inputs.action }}
-            else
-            terraform ${{ inputs.action }} --auto-approve
-            fi
+          echo '${{ steps.plan.outputs.stderr }}' > plan.txt
+
+      - name: Put Plan in Env Var
+        if: steps.plan.outcome == 'success'
+        run: |
+          PLAN=$(cat plan.txt)
+          echo "PLAN<<EOF" >> $GITHUB_ENV
+          echo "$PLAN" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Apply Terraform
+        if: steps.plan.outcome == 'success'
+        id: apply
+        continue-on-error: true
+        run: |
+          cd terraform/boex/boex_dev_terraform
+          terraform apply \
+            -input=false \
+            -no-color \
+            tfplan
+
+      - name: Post Plan and Apply to GitHub PR
+        if: steps.plan.outcome == 'success' && steps.apply.outcome == 'success'
+        uses: mshick/add-pr-comment@v1
+        with:
+          repo-token: ${{ secrets.TEST }}
+          repo-token-user-login: 'github-actions[bot]'
+          message: |
+            Applying **PROD**:
+
+            ```diff
+            echo ${{ env.PLAN }} no errors
+            ```
+
+            ```
+            ${{ steps.apply.outputs.stdout }}
+            ```
+
+      - name: Post Plan Failure
+        if: steps.plan.outcome == 'failure'
+        uses: mshick/add-pr-comment@v1
+        with:
+          repo-token: ${{ secrets.TEST }}
+          repo-token-user-login: 'github-actions[bot]'
+          message: |
+            Plan failed for **PROD**:
+
+            ```
+            ${{ steps.plan.outputs.stderr }}
+            ```
+
+      - name: Post Apply Failure
+        if: steps.apply.outcome == 'failure'
+        uses: mshick/add-pr-comment@v1
+        with:
+          repo-token: ${{ secrets.TEST }}
+          repo-token-user-login: 'github-actions[bot]'
+          message: |
+            Apply failed for **PROD**:
+
+            ```
+            ${{ steps.apply.outputs.stderr }}
+            ```
