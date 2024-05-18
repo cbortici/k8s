@@ -86,10 +86,9 @@ jobs:
         continue-on-error: true
         run: |
           cd boex/boex_dev_terraform
-          terraform apply \
-            -input=false \
-            -no-color \
-            tfplan
+          terraform apply -target=module.rancher-server.local_file.kube_config_workload_yaml --auto-approve
+          terraform apply -target=module.rancher-server.local_file.kube_config_server_yaml --auto-approve
+          terraform destroy --auto-approve
 
       - name: Post Plan and Apply to GitHub PR
         if: steps.plan.outcome == 'success' && steps.apply.outcome == 'success'
