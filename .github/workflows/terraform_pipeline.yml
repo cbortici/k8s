@@ -57,12 +57,14 @@ jobs:
 
       - name: Plan Terraform
         id: plan
+        continue-on-error: true
         run: |
           export TF_VAR_aws_secret_key=${{ secrets.SECRET }}
           export TF_VAR_aws_access_key=${{ secrets.ID }}
           cd boex/boex_dev_terraform
           terraform plan -input=false -no-color -out=tfplan \
           && terraform show -no-color tfplan
+        
 
       # Sed is taking all lines that begin with one or more spaces followed by a `+` or `-`.
       # It stores the amount of spaces in `\1` and the +/- in `\2`.
