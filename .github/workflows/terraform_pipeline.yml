@@ -1,4 +1,4 @@
-name: Plan / Apply On Merge
+name: Terraform test
 
 on: 
   workflow_dispatch:
