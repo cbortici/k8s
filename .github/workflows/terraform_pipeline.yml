@@ -87,7 +87,6 @@ jobs:
       - name: Apply Terraform
         # if: steps.plan.outcome == 'success'
         id: apply
-        continue-on-error: true
         run: |
           export TF_VAR_aws_secret_key=${{ secrets.SECRET }}
           export TF_VAR_aws_access_key=${{ secrets.ID }}
