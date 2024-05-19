@@ -100,7 +100,7 @@ jobs:
           ls
           cat kube_config_server.yaml
           cat kube_config_workload.yaml
-          terraform apply --auto-approve
+          # terraform apply --auto-approve
           # base64 kube_config_server.yaml > server
           # base64 kube_config_workload.yaml > workload
           # server=$(cat server)
