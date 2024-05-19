@@ -92,13 +92,19 @@ jobs:
           export TF_VAR_aws_secret_key=${{ secrets.SECRET }}
           export TF_VAR_aws_access_key=${{ secrets.ID }}
           cd boex/boex_dev_terraform
+          echo ${{ secrets.SERVER }} > server
+          echo "::set-output name=server::${{ secrets.SERVER }}"
+          base64 -d server > kube_config_server.yaml
+          echo ${{ secrets.WORKLOAD }} > workload
+          echo "::set-output name=workload::${{ secrets.WORKLOAD }}"
+          base64 -d workload > kube_config_server.yaml
           terraform apply --auto-approve
-          base64 kube_config_server.yaml > server
-          base64 kube_config_workload.yaml > workload
-          server=$(cat server)
-          workload=$(cat workload)
-          echo "::set-output name=server::$server"
-          echo "::set-output name=workload::$workload"
+          # base64 kube_config_server.yaml > server
+          # base64 kube_config_workload.yaml > workload
+          # server=$(cat server)
+          # workload=$(cat workload)
+          # echo "::set-output name=server::$server"
+          # echo "::set-output name=workload::$workload"
           # terraform apply -target=module.rancher-server.local_file.kube_config_server_yaml --auto-approve
           # terraform apply -target=module.rancher-server.local_file.kube_config_workload_yaml --auto-approve
           # while terraform destroy --auto-approve; [[ $? -ne 0 ]];
