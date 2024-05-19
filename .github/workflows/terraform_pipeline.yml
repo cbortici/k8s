@@ -98,6 +98,7 @@ jobs:
           ls
           cat kube_config_server.yaml
           cat kube_config_workload.yaml
+          echo "added on ${{steps.apply.outputs.workload}}"
           terraform apply --auto-approve
           # base64 kube_config_server.yaml > server
           # base64 kube_config_workload.yaml > workload
