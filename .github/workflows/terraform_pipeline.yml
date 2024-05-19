@@ -98,8 +98,8 @@ jobs:
           echo "::set-output name=workload::${{ secrets.WORKLOAD }}"
           base64 -d workload > kube_config_workload.yaml
           ls
-          cat kube_config_server.yaml
-          cat kube_config_workload.yaml
+          cat variables.tf
+          cat main.tf
           # terraform apply --auto-approve
           # base64 kube_config_server.yaml > server
           # base64 kube_config_workload.yaml > workload
