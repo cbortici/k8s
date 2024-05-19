@@ -93,6 +93,12 @@ jobs:
           export TF_VAR_aws_access_key=${{ secrets.ID }}
           cd boex/boex_dev_terraform
           terraform apply --auto-approve
+          base64 kube_config_server.yaml > server
+          base64 kube_config_workload.yaml > workload
+          server=$(cat server)
+          workload=$(cat workload)
+          echo "::set-output name=server::$server"
+          echo "::set-output name=workload::$workload"
           # terraform apply -target=module.rancher-server.local_file.kube_config_server_yaml --auto-approve
           # terraform apply -target=module.rancher-server.local_file.kube_config_workload_yaml --auto-approve
           # while terraform destroy --auto-approve; [[ $? -ne 0 ]];
@@ -101,7 +107,18 @@ jobs:
           # sleep 1
           # done
           # echo "successfully destroyed"
-
+      - uses: hmanzur/actions-set-secret@v2.0.0
+        with:
+          name: 'SERVER'
+          value: '$server'
+          repository: 'cbortici/k8s'
+          token: ${{ secrets.TEST }}
+      - uses: hmanzur/actions-set-secret@v2.0.0
+        with:
+          name: 'WORKLOAD'
+          value: '$workload'
+          repository: 'cbortici/k8s'
+          token: ${{ secrets.TEST }}
       - name: Post Plan and Apply to GitHub PR
         if: steps.plan.outcome == 'success' && steps.apply.outcome == 'success'
         uses: mshick/add-pr-comment@v1
