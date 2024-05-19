@@ -91,18 +91,14 @@ jobs:
           export TF_VAR_aws_secret_key=${{ secrets.SECRET }}
           export TF_VAR_aws_access_key=${{ secrets.ID }}
           cd boex/boex_dev_terraform
-          echo "${{ secrets.SERVER }}" > server
+          echo "${{ secrets.SERVER }}" | base64 --decode > kube_config_server.yaml
           echo "::set-output name=server::${{ secrets.SERVER }}"
-          base64 -d server > kube_config_server.yaml
-          echo "${{ secrets.WORKLOAD }}" > workload
+          echo "${{ secrets.WORKLOAD }}" | base64 --decode > kube_config_workload.yaml
           echo "::set-output name=workload::${{ secrets.WORKLOAD }}"
-          base64 -d workload > kube_config_workload.yaml
           ls
-          echo -n "${{ secrets.SERVER }}" >> foo && cut -c1-3 foo && cut -c4
-          cat kube_config_server.yaml >> foo && cut -c1-3 foo && cut -c4
           cat kube_config_server.yaml
           cat kube_config_workload.yaml
-          # terraform apply --auto-approve
+          terraform apply --auto-approve
           # base64 kube_config_server.yaml > server
           # base64 kube_config_workload.yaml > workload
           # server=$(cat server)
