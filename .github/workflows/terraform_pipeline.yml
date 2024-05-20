@@ -64,8 +64,8 @@ jobs:
           export TF_VAR_aws_secret_key=${{ secrets.SECRET }}
           export TF_VAR_aws_access_key=${{ secrets.ID }}
           cd boex/boex_dev_terraform
-          echo "${{ secrets.SERVER }}" | base64 --decode > kube_config_server.yaml
-          echo "${{ secrets.WORKLOAD }}" | base64 --decode > kube_config_workload.yaml
+          # echo "${{ secrets.SERVER }}" | base64 --decode > kube_config_server.yaml
+          # echo "${{ secrets.WORKLOAD }}" | base64 --decode > kube_config_workload.yaml
           ls -l
           set +e
           terraform plan -detailed-exitcode -input=false -out=tfplan
@@ -130,8 +130,8 @@ jobs:
           terraform apply -target=module.rancher-server.local_file.kube_config_server_yaml --auto-approve
           terraform apply -target=module.rancher-server.local_file.kube_config_workload_yaml --auto-approve
           # terraform apply --auto-approve
-          echo "${{ secrets.SERVER }}" | base64 --decode > kube_config_server.yaml
-          echo "${{ secrets.WORKLOAD }}" | base64 --decode > kube_config_workload.yaml
+          # echo "${{ secrets.SERVER }}" | base64 --decode > kube_config_server.yaml
+          # echo "${{ secrets.WORKLOAD }}" | base64 --decode > kube_config_workload.yaml
           while terraform destroy --auto-approve; [[ $? -ne 0 ]];
           do
           echo "Result unsuccessful"
