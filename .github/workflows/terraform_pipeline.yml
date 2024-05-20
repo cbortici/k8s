@@ -99,17 +99,18 @@ jobs:
           # cat kube_config_server.yaml
           # cat kube_config_workload.yaml
           # echo "added on ${{steps.apply.outputs.workload}}"
-          terraform apply --auto-approve
-          base64 kube_config_server.yaml > server
-          base64 kube_config_workload.yaml > workload
-          server=$(cat server)
-          workload=$(cat workload)
-          echo "::set-output name=server::$server"
-          echo "::set-output name=workload::$workload"
+          # terraform apply --auto-approve
+          # base64 kube_config_server.yaml > server
+          # base64 kube_config_workload.yaml > workload
+          # server=$(cat server)
+          # workload=$(cat workload)
+          # echo "::set-output name=server::$server"
+          # echo "::set-output name=workload::$workload"
           # cat server
           # cat workload
-          # terraform apply -target=module.rancher-server.local_file.kube_config_server_yaml --auto-approve
-          # terraform apply -target=module.rancher-server.local_file.kube_config_workload_yaml --auto-approve
+          terraform apply -target=module.rancher-server.local_file.kube_config_server_yaml --auto-approve
+          terraform apply -target=module.rancher-server.local_file.kube_config_workload_yaml --auto-approve
+          terraform apply --auto-approve
           # while terraform destroy --auto-approve; [[ $? -ne 0 ]];
           # do
           # echo "Result unsuccessful"
