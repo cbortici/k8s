@@ -64,8 +64,20 @@ jobs:
           export TF_VAR_aws_secret_key=${{ secrets.SECRET }}
           export TF_VAR_aws_access_key=${{ secrets.ID }}
           cd boex/boex_dev_terraform
-          terraform plan -input=false -no-color -out=tfplan \
-          && terraform show -no-color tfplan
+          set +e
+          terraform plan -detailed-exitcode -input=false -out=tfplan
+          exit_code=$?
+          set -e
+          if [ $exit_code -eq 2 ]; then
+            echo "There are pending changes."
+            exit 0
+          elif [ $exit_code -eq 0 ]; then
+            echo "No changes detected in the Terraform plan."
+            exit 0
+          else
+            echo "Terraform plan failed."
+            exit 1
+          fi
         
 
       # Sed is taking all lines that begin with one or more spaces followed by a `+` or `-`.
@@ -139,6 +151,7 @@ jobs:
           value: '$workload'
           repository: 'cbortici/k8s'
           token: ${{ secrets.TEST }}
+
       - name: Post Plan and Apply to GitHub PR
         if: steps.plan.outcome == 'success' && steps.apply.outcome == 'success'
         uses: mshick/add-pr-comment@v1
