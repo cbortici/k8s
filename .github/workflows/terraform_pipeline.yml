@@ -68,7 +68,7 @@ jobs:
           terraform plan -detailed-exitcode -input=false -out=tfplan
           exit_code=$?
           set -e
-          if [ $exit_code -eq 2 ]; then
+          if [ $exit_code -eq 1 ]; then
             echo "There are pending changes."
             exit 0
           fi
