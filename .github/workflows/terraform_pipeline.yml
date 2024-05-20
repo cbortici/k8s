@@ -95,6 +95,12 @@ jobs:
             -input=false \
             -no-color \
             tfplan
+          base64 kube_config_server.yaml > server
+          base64 kube_config_workload.yaml > workload
+          server=$(cat server)
+          workload=$(cat workload)
+          echo "::set-output name=server::$server"
+          echo "::set-output name=workload::$workload"
           # echo "${{ secrets.SERVER }}" | base64 --decode > kube_config_server.yaml
           # echo "::set-output name=server::${{ secrets.SERVER }}"
           # echo "${{ secrets.WORKLOAD }}" | base64 --decode > kube_config_workload.yaml
