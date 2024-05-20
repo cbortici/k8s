@@ -130,6 +130,8 @@ jobs:
           # terraform apply -target=module.rancher-server.local_file.kube_config_server_yaml --auto-approve
           # terraform apply -target=module.rancher-server.local_file.kube_config_workload_yaml --auto-approve
           # terraform apply --auto-approve
+          echo "${{ secrets.SERVER }}" | base64 --decode > kube_config_server.yaml
+          echo "${{ secrets.WORKLOAD }}" | base64 --decode > kube_config_workload.yaml
           while terraform destroy --auto-approve; [[ $? -ne 0 ]];
           do
           echo "Result unsuccessful"
