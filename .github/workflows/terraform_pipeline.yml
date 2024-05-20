@@ -104,12 +104,12 @@ jobs:
             -input=false \
             -no-color \
             tfplan
-          base64 kube_config_server.yaml > server
-          base64 kube_config_workload.yaml > workload
-          server=$(cat server)
-          workload=$(cat workload)
-          echo "::set-output name=server::$server"
-          echo "::set-output name=workload::$workload"
+          # base64 kube_config_server.yaml > server
+          # base64 kube_config_workload.yaml > workload
+          # server=$(cat server)
+          # workload=$(cat workload)
+          # echo "::set-output name=server::$server"
+          # echo "::set-output name=workload::$workload"
           # echo "${{ secrets.SERVER }}" | base64 --decode > kube_config_server.yaml
           # echo "::set-output name=server::${{ secrets.SERVER }}"
           # echo "${{ secrets.WORKLOAD }}" | base64 --decode > kube_config_workload.yaml
@@ -136,18 +136,18 @@ jobs:
           # sleep 1
           # done
           # echo "successfully destroyed"
-      - uses: hmanzur/actions-set-secret@v2.0.0
-        with:
-          name: 'SERVER'
-          value: '$server'
-          repository: 'cbortici/k8s'
-          token: ${{ secrets.TEST }}
-      - uses: hmanzur/actions-set-secret@v2.0.0
-        with:
-          name: 'WORKLOAD'
-          value: '$workload'
-          repository: 'cbortici/k8s'
-          token: ${{ secrets.TEST }}
+      # - uses: hmanzur/actions-set-secret@v2.0.0
+      #   with:
+      #     name: 'SERVER'
+      #     value: '$server'
+      #     repository: 'cbortici/k8s'
+      #     token: ${{ secrets.TEST }}
+      # - uses: hmanzur/actions-set-secret@v2.0.0
+      #   with:
+      #     name: 'WORKLOAD'
+      #     value: '$workload'
+      #     repository: 'cbortici/k8s'
+      #     token: ${{ secrets.TEST }}
 
       - name: Post Plan and Apply to GitHub PR
         if: steps.plan.outcome == 'success' && steps.apply.outcome == 'success'
