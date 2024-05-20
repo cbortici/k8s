@@ -66,6 +66,7 @@ jobs:
           cd boex/boex_dev_terraform
           echo "${{ secrets.SERVER }}" | base64 --decode > kube_config_server.yaml
           echo "${{ secrets.WORKLOAD }}" | base64 --decode > kube_config_workload.yaml
+          ls -l
           set +e
           terraform plan -detailed-exitcode -input=false -out=tfplan
           exit_code=$?
