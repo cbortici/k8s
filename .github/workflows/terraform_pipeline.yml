@@ -100,25 +100,25 @@ jobs:
           export TF_VAR_aws_secret_key=${{ secrets.SECRET }}
           export TF_VAR_aws_access_key=${{ secrets.ID }}
           cd boex/boex_dev_terraform
-          terraform apply \
-            -input=false \
-            -no-color \
-            tfplan
+          # terraform apply \
+          #   -input=false \
+          #   -no-color \
+          #   tfplan
           # base64 kube_config_server.yaml > server
           # base64 kube_config_workload.yaml > workload
           # server=$(cat server)
           # workload=$(cat workload)
           # echo "::set-output name=server::$server"
           # echo "::set-output name=workload::$workload"
-          # echo "${{ secrets.SERVER }}" | base64 --decode > kube_config_server.yaml
+          echo "YXBpVmVyc2lvbjogdjEKa2luZDogQ29uZmlnCmNsdXN0ZXJzOgotIG5hbWU6ICJsb2NhbCIKICBjbHVzdGVyOgogICAgc2VydmVyOiAiaHR0cHM6Ly9yYW5jaGVyLjM1LjE2Ni44NC4xOTIuc3NsaXAuaW8vazhzL2NsdXN0ZXJzL2xvY2FsIgogICAgY2VydGlmaWNhdGUtYXV0aG9yaXR5LWRhdGE6ICJMUzB0TFMxQ1JVZEpUaUJEUlZKVVNVWkpRMEZVUlMwdExTMHRDazFKU1VKMmFrTkRRXAogICAgICBWZFBaMEYzU1VKQlowbENRVVJCUzBKblozRm9hMnBQVUZGUlJFRnFRa2ROVW5kM1IyZFpSRlpSVVV0RmVFNXJaVmMxYUdKWGJHb0tZXAogICAgICBrZHNlbVJIVm5WYVdFbDBZak5LYmsxVFdYZEtRVmxFVmxGUlJFUkNNV3RsVnpWb1lsZHNhbUpIYkhwa1IxWjFXbGhKZEZreVJrRk5WXAogICAgICBHTjRUbXBKTlFwUFJFbDNUMFJCWlVaM01IbE9SRUV4VFdwRmVFMTZUWGROUkdoaFJuY3dlazVFUVRGTlZHdDRUWHBOZDAxRWFHRk5SXAogICAgICBWbDRTRVJCWVVKblRsWkNRVzlVQ2tVeVVqVmliVVowWVZkT2MyRllUakJhVnpWc1kya3hkbU50WTNoS2FrRnJRbWRPVmtKQlRVMUlWXAogICAgICAxSTFZbTFHZEdGWFRuTmhXRTR3V2xjMWJHTnBNV29LV1ZWQmVFNTZSVEpOYW1zMFRXcEJORTFHYTNkRmQxbElTMjlhU1hwcU1FTkJVXAogICAgICBWbEpTMjlhU1hwcU1FUkJVV05FVVdkQlJUVmthelZwZFU1S2RHSmlZd3BXT0dvM1NrSnlRbE50U1ZaRk16ZHFhV3RhV2xOcmFFWXlSXAogICAgICBIcHFja1ZXUzJaTVJ6RTBWRGQxUmxkTmFrdFpUVTAwTTNkbmJYSnBWblJMUlU1SVdHb3dDbXRNTTFGYWVXOHpiR0ZPUTAxRlFYZEVaXAogICAgICAxbEVWbEl3VUVGUlNDOUNRVkZFUVdkTGEwMUJPRWRCTVZWa1JYZEZRaTkzVVVaTlFVMUNRV1k0ZDBoUldVUUtWbEl3VDBKQ1dVVkdUXAogICAgICAxYzRTMEUzUVV0TE9HMXdUa1ZrZFhGb0swSjRMMU4yYjJwUlRVRnZSME5EY1VkVFRUUTVRa0ZOUTBFd2EwRk5SVmxEU1ZGRGJncHFWXAogICAgICAwZzNTa0UzVGtKNGNuWm9Ubk5tVUcxME9Ya3JVelp1ZWxnNVUzcFFkWGhSVlRKQmRURlBPVUZKYUVGUFVEUTFUbk5aV1RsdU5uaEpkXAogICAgICBWQnlZazQxQ25KUVYweDRkRU13Ymsxc1JHOXpPVEJSWTFJMGJXWjVVd290TFMwdExVVk9SQ0JEUlZKVVNVWkpRMEZVUlMwdExTMHQiCgp1c2VyczoKLSBuYW1lOiAibG9jYWwiCiAgdXNlcjoKICAgIHRva2VuOiAia3ViZWNvbmZpZy11c2VyLWt4d2x0OXJqazI6bHZibXNsMmJtMm5sY3Nrd3h2bms4ZGprNDhyYmI0OW50bGZmd3Z0cjI3bnRzaGR2eG16dm5oIgoKCmNvbnRleHRzOgotIG5hbWU6ICJsb2NhbCIKICBjb250ZXh0OgogICAgdXNlcjogImxvY2FsIgogICAgY2x1c3RlcjogImxvY2FsIgoKY3VycmVudC1jb250ZXh0OiAibG9jYWwiCg==" | base64 --decode > kube_config_server.yaml
           # echo "::set-output name=server::${{ secrets.SERVER }}"
-          # echo "${{ secrets.WORKLOAD }}" | base64 --decode > kube_config_workload.yaml
+          echo "YXBpVmVyc2lvbjogdjEKa2luZDogQ29uZmlnCmNsdXN0ZXJzOgotIG5hbWU6ICJjbHVzdGVyLWs4cyIKICBjbHVzdGVyOgogICAgc2VydmVyOiAiaHR0cHM6Ly9yYW5jaGVyLjM1LjE2Ni44NC4xOTIuc3NsaXAuaW8vazhzL2NsdXN0ZXJzL2MtbS12cGZ0Yzd3ayIKICAgIGNlcnRpZmljYXRlLWF1dGhvcml0eS1kYXRhOiAiTFMwdExTMUNSVWRKVGlCRFJWSlVTVVpKUTBGVVJTMHRMUzB0Q2sxSlNVSjJha05EUVwKICAgICAgVmRQWjBGM1NVSkJaMGxDUVVSQlMwSm5aM0ZvYTJwUFVGRlJSRUZxUWtkTlVuZDNSMmRaUkZaUlVVdEZlRTVyWlZjMWFHSlhiR29LWVwKICAgICAga2RzZW1SSFZuVmFXRWwwWWpOS2JrMVRXWGRLUVZsRVZsRlJSRVJDTVd0bFZ6Vm9ZbGRzYW1KSGJIcGtSMVoxV2xoSmRGa3lSa0ZOVlwKICAgICAgR040VG1wSk5RcFBSRWwzVDBSQlpVWjNNSGxPUkVFeFRXcEZlRTE2VFhkTlJHaGhSbmN3ZWs1RVFURk5WR3Q0VFhwTmQwMUVhR0ZOUlwKICAgICAgVmw0U0VSQllVSm5UbFpDUVc5VUNrVXlValZpYlVaMFlWZE9jMkZZVGpCYVZ6VnNZMmt4ZG1OdFkzaEtha0ZyUW1kT1ZrSkJUVTFJVlwKICAgICAgMUkxWW0xR2RHRlhUbk5oV0U0d1dsYzFiR05wTVdvS1dWVkJlRTU2UlRKTmFtczBUV3BCTkUxR2EzZEZkMWxJUzI5YVNYcHFNRU5CVVwKICAgICAgVmxKUzI5YVNYcHFNRVJCVVdORVVXZEJSVFZrYXpWcGRVNUtkR0ppWXdwV09HbzNTa0p5UWxOdFNWWkZNemRxYVd0YVdsTnJhRVl5UlwKICAgICAgSHBxY2tWV1MyWk1SekUwVkRkMVJsZE5ha3RaVFUwME0zZG5iWEpwVm5STFJVNUlXR293Q210TU0xRmFlVzh6YkdGT1EwMUZRWGRFWlwKICAgICAgMWxFVmxJd1VFRlJTQzlDUVZGRVFXZExhMDFCT0VkQk1WVmtSWGRGUWk5M1VVWk5RVTFDUVdZNGQwaFJXVVFLVmxJd1QwSkNXVVZHVFwKICAgICAgMWM0UzBFM1FVdExPRzF3VGtWa2RYRm9LMEo0TDFOMmIycFJUVUZ2UjBORGNVZFRUVFE1UWtGTlEwRXdhMEZOUlZsRFNWRkRiZ3BxVlwKICAgICAgMGczU2tFM1RrSjRjblpvVG5ObVVHMTBPWGtyVXpadWVsZzVVM3BRZFhoUlZUSkJkVEZQT1VGSmFFRlBVRFExVG5OWldUbHVObmhKZFwKICAgICAgVkJ5WWs0MUNuSlFWMHg0ZEVNd2JrMXNSRzl6T1RCUlkxSTBiV1o1VXdvdExTMHRMVVZPUkNCRFJWSlVTVVpKUTBGVVJTMHRMUzB0IgoKdXNlcnM6Ci0gbmFtZTogImNsdXN0ZXItazhzIgogIHVzZXI6CiAgICB0b2tlbjogImt1YmVjb25maWctdXNlci1reHdsdDVwOHhjOnJrbjI1MnF4NGY0aGRndDk0d2I4dHc4NXp2OGtwYzh6azc1YnN6d2hjNmJ0bndqZ3pzMjRiNCIKCgpjb250ZXh0czoKLSBuYW1lOiAiY2x1c3Rlci1rOHMiCiAgY29udGV4dDoKICAgIHVzZXI6ICJjbHVzdGVyLWs4cyIKICAgIGNsdXN0ZXI6ICJjbHVzdGVyLWs4cyIKCmN1cnJlbnQtY29udGV4dDogImNsdXN0ZXItazhzIgo=" | base64 --decode > kube_config_workload.yaml
           # echo "::set-output name=workload::${{ secrets.WORKLOAD }}"
           # ls
           # cat kube_config_server.yaml
           # cat kube_config_workload.yaml
           # echo "added on ${{steps.apply.outputs.workload}}"
-          # terraform apply --auto-approve
+          terraform apply --auto-approve
           # base64 kube_config_server.yaml > server
           # base64 kube_config_workload.yaml > workload
           # server=$(cat server)
