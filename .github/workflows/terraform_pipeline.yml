@@ -118,7 +118,7 @@ jobs:
           # cat kube_config_server.yaml
           # cat kube_config_workload.yaml
           # echo "added on ${{steps.apply.outputs.workload}}"
-          terraform apply --auto-approve
+          # terraform apply --auto-approve
           # base64 kube_config_server.yaml > server
           # base64 kube_config_workload.yaml > workload
           # server=$(cat server)
@@ -132,12 +132,12 @@ jobs:
           # terraform apply --auto-approve
           # echo "${{ secrets.SERVER }}" | base64 --decode > kube_config_server.yaml
           # echo "${{ secrets.WORKLOAD }}" | base64 --decode > kube_config_workload.yaml
-          # while terraform destroy --auto-approve; [[ $? -ne 0 ]];
-          # do
-          # echo "Result unsuccessful"
-          # sleep 1
-          # done
-          # echo "successfully destroyed"
+          while terraform destroy --auto-approve; [[ $? -ne 0 ]];
+          do
+          echo "Result unsuccessful"
+          sleep 1
+          done
+          echo "successfully destroyed"
       # - uses: hmanzur/actions-set-secret@v2.0.0
       #   with:
       #     name: 'SERVER'
