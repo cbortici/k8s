@@ -105,22 +105,14 @@ jobs:
           terraform apply -target=module.rancher-server.local_file.kube_config_workload_yaml --auto-approve
           terraform apply --auto-approve -no-color
           fi
-          # base64 kube_config_server.yaml > server
-          # base64 kube_config_workload.yaml > workload
-          # cat server
-          # cat workload
-          # server=$(cat server)
-          # workload=$(cat workload)
           echo "SERVER=$(cat kube_config_server.yaml | base64 -w 0)" >> $GITHUB_OUTPUT
           echo "WORKLOAD=$(cat kube_config_workload.yaml | base64 -w 0)" >> $GITHUB_OUTPUT
-          # echo "SERVER=$server" >> $GITHUB_OUTPUT
-          # echo "WORKLOAD=$workload" >> $GITHUB_OUTPUT
-          # while terraform destroy --auto-approve; [[ $? -ne 0 ]];
-          # do
-          # echo "Result unsuccessful"
-          # sleep 1
-          # done
-          # echo "successfully destroyed"
+          while terraform destroy --auto-approve; [[ $? -ne 0 ]];
+          do
+          echo "Result unsuccessful"
+          sleep 1
+          done
+          echo "successfully destroyed"
       - uses: hmanzur/actions-set-secret@v2.0.0
         with:
           name: 'SERVER'
