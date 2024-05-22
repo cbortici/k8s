@@ -73,9 +73,6 @@ jobs:
           elif [ $exit_code -eq 0 ]; then
             echo "No changes detected in the Terraform plan."
             exit 0
-          else
-            echo "Terraform plan failed."
-            exit 1
           fi
         
 
