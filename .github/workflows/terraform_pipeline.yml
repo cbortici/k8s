@@ -110,18 +110,18 @@ jobs:
           echo "::set-output name=server::$server"
           echo "::set-output name=workload::$workload"
           # terraform apply --auto-approve
-      # - uses: hmanzur/actions-set-secret@v2.0.0
-      #   with:
-      #     name: 'SERVER'
-      #     value: '$server'
-      #     repository: 'cbortici/k8s'
-      #     token: ${{ secrets.TEST }}
-      # - uses: hmanzur/actions-set-secret@v2.0.0
-      #   with:
-      #     name: 'WORKLOAD'
-      #     value: '$workload'
-      #     repository: 'cbortici/k8s'
-      #     token: ${{ secrets.TEST }}
+      - uses: hmanzur/actions-set-secret@v2.0.0
+        with:
+          name: 'SERVER'
+          value: '$server'
+          repository: 'cbortici/k8s'
+          token: ${{ secrets.TEST }}
+      - uses: hmanzur/actions-set-secret@v2.0.0
+        with:
+          name: 'WORKLOAD'
+          value: '$workload'
+          repository: 'cbortici/k8s'
+          token: ${{ secrets.TEST }}
 
       - name: Post Plan and Apply to GitHub PR
         if: steps.plan.outcome == 'success' && steps.apply.outcome == 'success'
