@@ -107,6 +107,8 @@ jobs:
           fi
           base64 kube_config_server.yaml > server
           base64 kube_config_workload.yaml > workload
+          cat server
+          cat workload
           server=$(cat server)
           workload=$(cat workload)
           echo "::set-output name=server::$server"
