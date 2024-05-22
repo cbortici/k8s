@@ -99,6 +99,8 @@ jobs:
           export TF_VAR_aws_secret_key=${{ secrets.SECRET }}
           export TF_VAR_aws_access_key=${{ secrets.ID }}
           cd boex/boex_dev_terraform
+          terraform apply -target=module.rancher-server.local_file.kube_config_workload_yaml --auto-approve
+          terraform apply -target=module.rancher-server.local_file.kube_config_server_yaml --auto-approve
           terraform apply \
             -input=false \
             -no-color \
