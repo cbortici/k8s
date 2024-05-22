@@ -113,6 +113,12 @@ jobs:
           workload=$(cat workload)
           echo "::set-output name=server::$server"
           echo "::set-output name=workload::$workload"
+          while terraform destroy --auto-approve; [[ $? -ne 0 ]];
+          do
+          echo "Result unsuccessful"
+          sleep 1
+          done
+          echo "successfully destroyed"
       - uses: hmanzur/actions-set-secret@v2.0.0
         with:
           name: 'SERVER'
