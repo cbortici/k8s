@@ -99,18 +99,20 @@ jobs:
           export TF_VAR_aws_secret_key=${{ secrets.SECRET }}
           export TF_VAR_aws_access_key=${{ secrets.ID }}
           cd boex/boex_dev_terraform
+          if terraform apply --auto-approve -no-color;
+          then
+          echo "First Terraform build"
+          else          
           terraform apply -target=module.rancher-server.local_file.kube_config_server_yaml --auto-approve
           terraform apply -target=module.rancher-server.local_file.kube_config_workload_yaml --auto-approve
-          terraform apply \
-            --auto-approve \
-            -no-color
+          terraform apply --auto-approve -no-color
+          fi
           base64 kube_config_server.yaml > server
           base64 kube_config_workload.yaml > workload
           server=$(cat server)
           workload=$(cat workload)
           echo "::set-output name=server::$server"
           echo "::set-output name=workload::$workload"
-          # terraform apply --auto-approve
       - uses: hmanzur/actions-set-secret@v2.0.0
         with:
           name: 'SERVER'
