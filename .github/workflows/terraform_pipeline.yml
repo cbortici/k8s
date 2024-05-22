@@ -65,7 +65,7 @@ jobs:
           export TF_VAR_aws_access_key=${{ secrets.ID }}
           cd boex/boex_dev_terraform
           set +e
-          terraform plan -detailed-exitcode -input=false -out=tfplan
+          terraform plan -detailed-exitcode -input=false
           set -e
           if [ $exit_code -eq 2 ]; then
             echo "There are pending changes."
@@ -99,12 +99,11 @@ jobs:
           export TF_VAR_aws_secret_key=${{ secrets.SECRET }}
           export TF_VAR_aws_access_key=${{ secrets.ID }}
           cd boex/boex_dev_terraform
-          terraform apply -target=module.rancher-server.local_file.kube_config_server_yaml --auto-approve >> tfplan
-          terraform apply -target=module.rancher-server.local_file.kube_config_workload_yaml --auto-approve >> tfplan
+          terraform apply -target=module.rancher-server.local_file.kube_config_server_yaml --auto-approve
+          terraform apply -target=module.rancher-server.local_file.kube_config_workload_yaml --auto-approve
           terraform apply \
             -input=false \
             -no-color \
-            tfplan
           base64 kube_config_server.yaml > server
           base64 kube_config_workload.yaml > workload
           server=$(cat server)
