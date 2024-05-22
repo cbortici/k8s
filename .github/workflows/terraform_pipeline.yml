@@ -111,8 +111,8 @@ jobs:
           cat workload
           server=$(cat server)
           workload=$(cat workload)
-          echo "::set-output name=server::$server"
-          echo "::set-output name=workload::$workload"
+          echo "SERVER=$server" >> $GITHUB_OUTPUT
+          echo "WORKLOAD=$workload" >> $GITHUB_OUTPUT
           # while terraform destroy --auto-approve; [[ $? -ne 0 ]];
           # do
           # echo "Result unsuccessful"
@@ -122,13 +122,13 @@ jobs:
       - uses: hmanzur/actions-set-secret@v2.0.0
         with:
           name: 'SERVER'
-          value: '$server'
+          value: '${{ steps.apply.outputs.SERVER }}'
           repository: 'cbortici/k8s'
           token: ${{ secrets.TEST }}
       - uses: hmanzur/actions-set-secret@v2.0.0
         with:
           name: 'WORKLOAD'
-          value: '$workload'
+          value: '${{ steps.apply.outputs.WORKLOAD }}'
           repository: 'cbortici/k8s'
           token: ${{ secrets.TEST }}
 
